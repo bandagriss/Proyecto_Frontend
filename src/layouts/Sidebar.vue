@@ -23,25 +23,25 @@
 
 <script>
 
- import EventBus from './event-bus';
+import EventBus from './event-bus';
 
- /* EventBus.$on('menuClick', (activo) => {
+/* EventBus.$on('menuClick', (activo) => {
   *   console.log(`actual this activo ${ this.activo}`);
   *   this.activo = activo;
   * }); */
 
- export default {
-   data() {
-     return {
-       activo: false,
-     };
-   },
-   created() {
-     EventBus.$on('menuClick', (activo) => {
-       this.activo = activo;
-     });
-   },
- };
+export default {
+  data() {
+    return {
+      activo: false,
+    };
+  },
+  created() {
+    EventBus.$on('menuClick', (activo) => {
+      this.activo = activo;
+    });
+  },
+};
 
 </script>
 
@@ -64,7 +64,7 @@
  #sidebar.active {
    left: -250px;
  }
- 
+
 
  #sidebar ul li {
    color: rgba(230, 230, 230, 0.9);
@@ -90,7 +90,7 @@
    background: #151719;
    margin: 3px 0px;
  }
- 
+
  .router-link-active {
    display: block;
    background-color: #41b883;
