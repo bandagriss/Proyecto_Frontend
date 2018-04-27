@@ -45,6 +45,7 @@ export default {
    position: relative;
    left: 290px;
    transition: all 200ms linear;
+   background-color: red;
  }
 
  #contenido.active {

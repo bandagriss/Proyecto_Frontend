@@ -17,10 +17,37 @@
     </div>
     <div id="menu-dinamico">
       <ul>
-        <li><router-link :to="{name:'Inicio'}">Inicio</router-link></li>
-        <li><router-link :to="{name:'Otro'}">Financiadores</router-link></li>
-        <li><router-link :to="{name:'Contactos'}">Proyectos</router-link></li>
-        <li><router-link :to="{name:'Contactos'}">Configuración</router-link></li>
+        <li><router-link :to="{name:'Inicio'}">
+          <span class="icon">
+            <icon name="home" scale="1.5"></icon>
+          </span>
+        <span class="espacio">Inicio</span>
+        </router-link></li>
+        <li><router-link :to="{name:'Otro'}">
+          <span class="icon">
+            <icon name="users" scale="1.5"></icon>
+          </span>
+          <span class="espacio">Financiadores</span>
+          </router-link></li>
+        <li><router-link :to="{name:'Contactos'}">
+          <span class="icon">
+            <icon name="credit-card" scale="1.5"></icon>
+          </span>
+          <span class="espacio">Proyectos</span>
+        </router-link></li>
+        <li><router-link :to="{name:'Contactos'}">
+          <span class="icon">
+            <icon name="cogs" scale="1.5"></icon>
+          </span>
+          <span class="espacio">Configuración</span>
+        </router-link>
+          <ul>
+              <li>Usuarios</li>
+              <li>Roles</li>
+              <li>Departamentos</li>
+              <li>Instituciones</li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>
@@ -137,12 +164,12 @@ export default {
 
  /* we apply different background color to 2nd level menu items*/
  #menu-dinamico ul li ul li{
-   background-color:#cae25a;
+   background-color:#272c33;
  }
 
  /* We change the background color for the level 2 submenu when hovering the menu */
  #menu-dinamico ul li:hover ul li:hover{
-   background-color:#b1b536;
+   background-color:#41b883;
  }
 
  /* We style the color of level 2 links */
@@ -191,6 +218,10 @@ export default {
  .datos-usuario {
    color: white;
    text-align: center;
+ }
+
+ .espacio {
+   padding: 0px 0px 0px 10px;
  }
 
 
