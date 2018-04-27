@@ -1,21 +1,26 @@
 <template>
-
   <div id="sidebar" :class="activo? 'active' : ''">
-    <div class="toggle-btn">
+    <div class="organizacion">
+      <h1 class="is-size-1 has-text-white has-text-centered has-text-weight-normal">CEADL</h1>
     </div>
     <div class="marco-imagen">
       <div class="imagen-usuario">
         <figure class="image is-256x256 imagen-usuario">
-          <!-- <img src="https://images5.alphacoders.com/413/413842.jpg"> -->
           <img src="https://images5.alphacoders.com/413/413842.jpg">
         </figure>
+        <div class="datos-usuario">
+          Nivel: {{ rol_usuario }}
+          <br/>
+          {{ nombre_usuario }}
+        </div>
       </div>
     </div>
-    <div id="menu-dinammico">
+    <div id="menu-dinamico">
       <ul>
         <li><router-link :to="{name:'Inicio'}">Inicio</router-link></li>
-        <li><router-link :to="{name:'Otro'}">Acerca de</router-link></li>
-        <li><router-link :to="{name:'Contactos'}">Contactos</router-link></li>
+        <li><router-link :to="{name:'Otro'}">Financiadores</router-link></li>
+        <li><router-link :to="{name:'Contactos'}">Proyectos</router-link></li>
+        <li><router-link :to="{name:'Contactos'}">Configuración</router-link></li>
       </ul>
     </div>
   </div>
@@ -34,6 +39,8 @@ export default {
   data() {
     return {
       activo: false,
+      nombre_usuario: 'Naruto Uzumaki',
+      rol_usuario: 'Administrador',
     };
   },
   created() {
@@ -56,7 +63,7 @@ export default {
    position: fixed;
    width: 250px;
    height: 100%;
-   background: #151719;
+   background: #272c33;
    left: 0px;
    transition: all 200ms linear;
  }
@@ -65,35 +72,11 @@ export default {
    left: -250px;
  }
 
-
- #sidebar ul li {
-   color: rgba(230, 230, 230, 0.9);
-   list-style: none;
-   padding: 15px 10px;
-   border-bottom: 1px solid rgba(100,100,100,0.3);
- }
-
- #sidebar ul li > a {
-   color: rgba(230, 230, 230, 0.9);
- }
-
- #sidebar .toggle-btn {
-   position: absolute;
-   left: 280px;
-   top: 20px;
- }
-
- #sidebar .toggle-btn span {
-   display: block;
-   width: 30px;
-   height: 5px;
-   background: #151719;
-   margin: 3px 0px;
- }
-
  .router-link-active {
    display: block;
    background-color: #41b883;
+   color: white !important;
+   width: 250px;
    border-bottom: 1px solid rgba(100,100,100,0.3);
  }
 
@@ -105,7 +88,110 @@ export default {
  }
 
  .imagen-usuario {
-   background: red;
+   background: black;
  }
+
+ #menu-dinamico ul, #menu-dinamico ul li{
+   margin: 0;
+   padding: 0;
+   list-style: none;
+   padding: 0px 0px 0px 0px;
+ }
+
+ #menu-dinamico ul li{
+   background-color:#272c33;
+   border-bottom:solid 1px white;
+   width:250px;
+   cursor:pointer;
+ }
+
+ #menu-dinamico ul li:hover{
+   background-color:#41b883;
+   position:relative;
+ }
+
+ #menu-dinamico ul li a:hover{
+   color: white;
+ }
+
+ #menu-dinamico ul li a{
+   color:#41b883;
+   display:block;
+   text-decoration:none;
+   padding: 20px 20px;
+ }
+
+ /**** SECOND LEVEL MENU ****/
+
+ #menu-dinamico ul li ul{
+   position:absolute;
+   display:none;
+ }
+
+
+ #menu-dinamico ul li:hover ul{
+   left:150px;
+   top:0px;
+   display:block;
+ }
+
+ /* we apply different background color to 2nd level menu items*/
+ #menu-dinamico ul li ul li{
+   background-color:#cae25a;
+ }
+
+ /* We change the background color for the level 2 submenu when hovering the menu */
+ #menu-dinamico ul li:hover ul li:hover{
+   background-color:#b1b536;
+ }
+
+ /* We style the color of level 2 links */
+ #menu-dinamico ul li ul li a{
+   color:#454444;
+   display:inline-block;
+   width:120px;
+ }
+
+ /**** THIRD LEVEL MENU ****/
+ /* We need to hide the 3rd menu, when hovering the first level menu */
+ #menu-dinamico ul li:hover ul li ul{
+   position:absolute;
+   display:none;
+ }
+
+ /* We show the third level menu only when they hover the second level menu parent */
+ #menu-dinamico ul li:hover ul li:hover ul{
+   display:block;
+   left:150px;
+   top:0;
+ }
+
+ /* We change the background color for the level 3 submenu*/
+ #menu-dinamico ul li:hover ul li:hover ul li{
+   background:#86d3fa;
+ }
+
+ /* We change the background color for the level 3 submenu when hovering the menu */
+
+ #menu-dinamico ul li:hover ul li:hover ul li:hover{
+   background:#358ebc;
+ }
+
+ /* We change the level 3 link color */
+ #menu-dinamico ul li:hover ul li:hover ul li a{
+   color:#ffffff;
+ }
+
+
+ /* Clear float */
+ .clear{
+   clear:both;
+ }
+
+ .datos-usuario {
+   color: white;
+   text-align: center;
+ }
+
 
 </style>

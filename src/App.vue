@@ -43,11 +43,11 @@ export default {
    -moz-osx-font-smoothing: grayscale;
    margin-top: 60px;
    position: relative;
-   left: 270px;
+   left: 290px;
    transition: all 200ms linear;
  }
 
  #contenido.active {
-   left: 20px;
+   left: 40px;
  }
 </style>
