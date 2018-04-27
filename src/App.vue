@@ -5,7 +5,11 @@
     <sidebar></sidebar>
     <navbar></navbar>
     <div id="contenido" :class="activo? 'active' : ''">
-      <router-view/>
+      <div class="columns2">
+        <div class="column2 marco-contenido">
+          <router-view/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +52,69 @@ export default {
    background-color: red;
  }
 
- #contenido.active {
-   left: 40px;
+ @media screen and (max-width: 1920px) {
+   #contenido {
+     width: 82%;
+   }
+   #contenido.active {
+     left: 30px;
+     width: 96%
+   }
  }
+
+ @media screen and (max-width: 1600px) {
+   #contenido {
+     width: 80%;
+   }
+   #contenido.active {
+     left: 30px;
+     width: 96%
+   }
+ }
+
+ @media screen and (max-width: 1368px) {
+   #contenido {
+     width: 76%;
+   }
+   #contenido.active {
+     left: 30px;
+     width: 96%
+   }
+ }
+
+
+ @media screen and (max-width: 1216px) {
+   #contenido {
+     width: 68%;
+   }
+   #contenido.active {
+     left: 20px;
+     width: 96%
+   }
+ }
+
+ @media screen and (max-width: 1023px) {
+   #contenido {
+     width: 38%;
+   }
+   #contenido.active {
+     left: 20px;
+     width: 95%;
+   }
+ }
+
+
+ @media screen and (max-width: 768px) {
+   #contenido {
+     width: 50%;
+   }
+
+   #contenido.active {
+     left: 20px;
+     width: 91%;
+   }
+
+ }
+
+
 </style>

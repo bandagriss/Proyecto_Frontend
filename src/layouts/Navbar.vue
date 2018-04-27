@@ -83,12 +83,12 @@ export default {
 <style>
  #navbar-resize {
    position: relative;
-   left: 270px;
+   left: 250px;
    transition: all 200ms linear;
  }
 
  #navbar-resize.active {
-   left: 20px;
+   left: 0px;
  }
 
  .navbar-link {
