@@ -49,7 +49,8 @@ export default {
    position: relative;
    left: 290px;
    transition: all 200ms linear;
-   background-color: red;
+   background-color: #e8e5e547;
+   padding: 4px 4px 4px 4px;
  }
 
  @media screen and (max-width: 1920px) {
