@@ -2,8 +2,6 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <div v-if="user.authenticated">
-
-
       <sidebar></sidebar>
       <navbar></navbar>
       <div id="contenido" :class="activo? 'active' : ''">
@@ -25,6 +23,7 @@
 import Navbar from '@/layouts/Navbar';
 import Sidebar from '@/layouts/Sidebar';
 import EventBus from './layouts/event-bus';
+import auth from './auth';
 
 export default {
   name: 'App',
