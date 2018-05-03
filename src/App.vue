@@ -1,15 +1,21 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
+    <div v-if="user.authenticated">
 
-    <sidebar></sidebar>
-    <navbar></navbar>
-    <div id="contenido" :class="activo? 'active' : ''">
-      <div class="columns2">
-        <div class="column2 marco-contenido">
-          <router-view/>
+
+      <sidebar></sidebar>
+      <navbar></navbar>
+      <div id="contenido" :class="activo? 'active' : ''">
+        <div class="columns2">
+          <div class="column2 marco-contenido">
+            <router-view/>
+          </div>
         </div>
       </div>
+    </div>
+    <div v-else>
+      <router-view/>
     </div>
   </div>
 </template>
@@ -25,6 +31,7 @@ export default {
   data() {
     return {
       activo: false,
+      user: auth.user,
     };
   },
   components: {
@@ -36,6 +43,11 @@ export default {
       /* console.log(`llega al container`); */
       this.activo = activo;
     });
+  },
+  methods: {
+    logout() {
+      auth.logout();
+    },
   },
 };
 </script>
