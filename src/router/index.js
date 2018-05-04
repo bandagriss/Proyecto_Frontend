@@ -2,6 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Inicio from '@/components/Inicio';
 import Otro from '@/components/Otro';
+// rutas de configuracion
+import Departamento from '@/components/configuracion/Departamento';
+
 import Contactos from '@/components/Contactos';
 import Login from '@/auth/Login';
 import Registrarse from '@/auth/Register';
@@ -23,16 +26,24 @@ export default new Router({
       path: '/otro',
       name: 'Otro',
       component: Otro,
+      meta: { requiresAuth: true },
     },
     {
       path: '/contactos',
       name: 'Contactos',
       component: Contactos,
+      meta: { requiresAuth: true },
     },
     {
       path: '/',
       name: 'login',
       component: Login,
+    },
+    {
+      path: '/departamentos',
+      name: 'Departamento',
+      component: Departamento,
+      meta: { requiresAuth: true },
     },
     {
       path: '/registrarse',

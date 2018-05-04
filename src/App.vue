@@ -52,15 +52,19 @@ export default {
 </script>
 
 <style>
+ body {
+   background-color: #f1f2f7;
+ }
+
  #contenido {
    font-family: 'Avenir', Helvetica, Arial, sans-serif;
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
-   margin-top: 60px;
+   margin-top: 20px;
    position: relative;
    left: 290px;
    transition: all 200ms linear;
-   background-color: #e8e5e547;
+   /* background-color: #e8e5e547; */
    padding: 4px 4px 4px 4px;
  }
 

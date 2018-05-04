@@ -2,8 +2,8 @@ import axios from 'axios';
 import router from '../router';
 
 
-const API_URL = 'http://localhost:3001/';
-const LOGIN_URL = `${API_URL}/create`;
+const API_URL = 'http://localhost:3000/';
+const LOGIN_URL = `${API_URL}auth`;
 const SIGNUP_URL = `${API_URL}users/`;
 
 export default {
@@ -26,7 +26,7 @@ export default {
       }
       axios.post(url, creds)
         .then((response) => {
-          localStorage.setItem('id_token', response.data.id_token);
+          localStorage.setItem('id_token', response.data.token);
           // localStorage.setItem('usuario', response.data.usuario);
 
           this.user.authenticated = true;

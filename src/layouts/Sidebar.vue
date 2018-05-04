@@ -62,7 +62,7 @@
             </router-link>
           </li>
           <li>
-            <router-link :to="{name: 'Inicio'}">
+            <router-link :to="{name: 'Departamento'}">
               <span class="espacio-submenu"></span>
               <span class="icon">
                 <icon name="sitemap" scale="1.5"></icon>
