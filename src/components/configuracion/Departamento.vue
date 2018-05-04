@@ -28,6 +28,7 @@
       </tfoot>
       <tbody>
         <tr v-for="(departamento, key) in departamentos" :key="key">
+          <template>
           <td>{{ departamento.id }}</td>
           <td>{{ departamento.nombre }}</td>
           <td>
@@ -42,6 +43,7 @@
               </span>
             </a>
           </td>
+          </template>
         </tr>
       </tbody>
     </table>
@@ -52,10 +54,9 @@
 
 <script>
 
-import axios from 'axios';
-import auth from '../../auth';
 import Mensajes from '../../common/generals/js/Notificacion';
-import router from '../../router';
+import http from '../../common/generals/js/DataService';
+
 
 export default {
   data() {
@@ -65,22 +66,12 @@ export default {
   },
   notifications: Mensajes.mensajes,
   created() {
-    axios.get('http://localhost:3000/api/v1/departamentos', {
-      headers: auth.getAuthHeader(),
-    })
+    http.get('departamentos')
       .then((respuesta) => {
-        this.departamentos = respuesta.data.datos;
+        this.departamentos = respuesta.datos;
       })
       .catch((error) => {
-        if (!error.response) {
-          this.Error({ title: 'Error al recuperar los departamentos', message: 'Ocurrió un problema con la conexíon' });
-          router.push('/500');
-        } else if (error.response.status === 401) {
-          auth.logout();
-          this.Error({ title: 'Su sessión a expirado', message: 'Vuelva a logearse porfavor.' });
-        } else {
-          this.Error({ title: 'Error al recuperar los departamentos', message: error });
-        }
+        this.Error(error);
       });
   },
 };
