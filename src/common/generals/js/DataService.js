@@ -44,7 +44,30 @@ function get(url) {
   });
 }
 
+function post(url, data) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${config.API_REST_PRIVADA}${url}`, data, head())
+      .then(respuesta => resolve(respuesta.data))
+      .catch(error => reject(ErrorMensaje(error)));
+  });
+}
+
+function put(url, data) {
+  return new Promise((resolve, reject) => {
+    axios.put(`${config.API_REST_PRIVADA}${url}`, data, head())
+      .then(respuesta => resolve(respuesta.data))
+      .catch(error => reject(ErrorMensaje(error)));
+  });
+}
+
+function deleted(url) {
+  return new Promise((resolve, reject) => {
+    axios.delete(`${config.API_REST_PRIVADA}${url}`, head())
+      .then(respuesta => resolve(respuesta.data))
+      .catch(error => reject(ErrorMensaje(error)));
+  });
+}
 
 export default {
-  get,
+  get, post, put, deleted,
 };
