@@ -1,15 +1,19 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-
-    <sidebar></sidebar>
-    <navbar></navbar>
-    <div id="contenido" :class="activo? 'active' : ''">
-      <div class="columns2">
-        <div class="column2 marco-contenido">
-          <router-view/>
+    <div v-if="user.authenticated">
+      <sidebar></sidebar>
+      <navbar></navbar>
+      <div id="contenido" :class="activo? 'active' : ''">
+        <div class="columns2">
+          <div class="column2 marco-contenido">
+            <router-view/>
+          </div>
         </div>
       </div>
+    </div>
+    <div v-else>
+      <router-view/>
     </div>
   </div>
 </template>
@@ -19,12 +23,14 @@
 import Navbar from '@/layouts/Navbar';
 import Sidebar from '@/layouts/Sidebar';
 import EventBus from './layouts/event-bus';
+import auth from './auth';
 
 export default {
   name: 'App',
   data() {
     return {
       activo: false,
+      user: auth.user,
     };
   },
   components: {
@@ -37,19 +43,28 @@ export default {
       this.activo = activo;
     });
   },
+  methods: {
+    logout() {
+      auth.logout();
+    },
+  },
 };
 </script>
 
 <style>
+ body {
+   background-color: #f1f2f7;
+ }
+
  #contenido {
    font-family: 'Avenir', Helvetica, Arial, sans-serif;
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
-   margin-top: 60px;
+   margin-top: 20px;
    position: relative;
    left: 290px;
    transition: all 200ms linear;
-   background-color: #e8e5e547;
+   /* background-color: #e8e5e547; */
    padding: 4px 4px 4px 4px;
  }
 

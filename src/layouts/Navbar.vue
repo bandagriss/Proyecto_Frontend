@@ -34,7 +34,7 @@
                 Datos Personales
               </a>
               <a class="navbar-item"
-              >
+               @click="logout">
                 Cerrar Sessión
               </a>
             </div>
@@ -48,6 +48,7 @@
 <script>
 
 import EventBus from './event-bus';
+import auth from '../auth';
 
 export default {
   data() {
@@ -74,6 +75,9 @@ export default {
       this.activo = !this.activo;
       EventBus.$emit('menuClick', this.activo);
       EventBus.$emit('menuClickContenido', this.activo);
+    },
+    logout() {
+      auth.logout();
     },
   },
 };
