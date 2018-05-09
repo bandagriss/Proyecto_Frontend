@@ -6,7 +6,8 @@
     <div class="marco-imagen">
       <div class="imagen-usuario">
         <figure class="image is-256x256 imagen-usuario">
-          <img src="https://images5.alphacoders.com/413/413842.jpg">
+          <!-- <img src="https://images5.alphacoders.com/413/413842.jpg"> -->
+          <img src="../assets/naruto.jpg">
         </figure>
         <div class="datos-usuario">
           Nivel: {{ rol_usuario }}
