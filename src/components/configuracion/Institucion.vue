@@ -5,12 +5,12 @@
       <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li><a href="#">Configuración</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Departamentos</a></li>
+          <li class="is-active"><a href="#" aria-current="page">Instituciones</a></li>
         </ul>
       </nav>
     </div>
     <!-- breadcrumb -->
-    <h1 class="title is-2"> Departamentos </h1>
+    <h1 class="title is-2"> Instituciones </h1>
     <a class="button is-rounded is-success" @click="modalNuevo()">
       <span>Crear Nuevo</span>
       <span class="icon">
@@ -24,6 +24,7 @@
         <tr>
           <th><abbr title="Identificador">ID</abbr></th>
           <th>Nombre</th>
+          <th>Departamento</th>
           <th>Opciones</th>
         </tr>
       </thead>
@@ -31,26 +32,28 @@
         <tr>
           <th><abbr title="Identificador">ID</abbr></th>
           <th>Nombre</th>
+          <th> Departamento</th>
           <th>Opciones</th>
         </tr>
       </tfoot>
       <tbody>
-        <tr v-for="(departamento, key) in departamentos" :key="key">
+        <tr v-for="(institucion, key) in instituciones" :key="key">
           <template>
-          <td>{{ departamento.id }}</td>
-          <td>{{ departamento.nombre }}</td>
-          <td>
-            <a class="color-edit" @click="editarItem(departamento, key)">
-              <span class="icon">
-                <icon name="edit" scale="1.5" class="color-amarillo"></icon>
-              </span>
-            </a>
-            <a @click="modalEliminar(departamento, key)">
-              <span class="icon">
-                <icon name="trash" scale="1.5" class="color-rojo"></icon>
-              </span>
-            </a>
-          </td>
+            <td>{{ institucion.id }}</td>
+            <td>{{ institucion.nombre }}</td>
+            <td>{{ institucion.Departamento.nombre }}</td>
+            <td>
+              <a class="color-edit" @click="editarItem(institucion, key)">
+                <span class="icon">
+                  <icon name="edit" scale="1.5" class="color-amarillo"></icon>
+                </span>
+              </a>
+              <a @click="modalEliminar(institucion, key)">
+                <span class="icon">
+                  <icon name="trash" scale="1.5" class="color-rojo"></icon>
+                </span>
+              </a>
+            </td>
           </template>
         </tr>
       </tbody>
@@ -60,14 +63,14 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">{{ accion }} Departamento</p>
+          <p class="modal-card-title">{{ accion }} Institución</p>
           <button class="delete" aria-label="close" @click="cerrarModalNuevo()"></button>
         </header>
         <section class="modal-card-body">
           <input
             class="input"
             type="text"
-            placeholder="Nombre Departamento"
+            placeholder="Nombre Institución"
             v-model="objeto.nombre"
           />
         </section>
@@ -120,7 +123,7 @@ import http from '../../common/generals/js/DataService';
 export default {
   data() {
     return {
-      departamentos: '',
+      instituciones: '',
       modal_nuevo_activado: false,
       objeto: {},
       key: '',
@@ -130,9 +133,9 @@ export default {
   },
   notifications: Mensajes.mensajes,
   created() {
-    http.get('departamentos')
+    http.get('institucion')
       .then((respuesta) => {
-        this.departamentos = respuesta.datos;
+        this.instituciones = respuesta.datos;
       })
       .catch((error) => {
         this.Error(error);
@@ -159,32 +162,28 @@ export default {
       }
     },
     crear(data) {
-      http.post('departamentos', data)
+      http.post('institucion', data)
         .then((respuesta) => {
-          const nuevoDepartamento = {
+          const nuevoInstitución = {
             id: respuesta.datos.id,
             nombre: respuesta.datos.nombre,
           };
-          this.departamentos.push(nuevoDepartamento);
+          this.instituciones.push(nuevoInstitución);
           this.Success({ title: 'Guardado con éxito', message: respuesta.mensaje });
-          this.modal_nuevo_activado = false;
-          this.objeto = {};
-          this.key = '';
+          this.limpiar();
         })
         .catch(error => this.Error(error));
     },
     actualizar(item, data) {
-      http.put(`departamentos/${item.id}`, data)
+      http.put(`institucion/${item.id}`, data)
         .then((respuesta) => {
-          const nuevoDepartamento = {
+          const nuevoInstitución = {
             id: respuesta.datos.id,
             nombre: respuesta.datos.nombre,
           };
-          this.departamentos.splice(this.key, 1, nuevoDepartamento);
+          this.instituciones.splice(this.key, 1, nuevoInstitución);
           this.Success({ title: 'Actualizado con éxito', message: respuesta.mensaje });
-          this.modal_nuevo_activado = false;
-          this.objeto = {};
-          this.key = '';
+          this.limpiar();
         })
         .catch(error => this.Error(error));
     },
@@ -205,14 +204,18 @@ export default {
       this.key = '';
     },
     eliminar() {
-      http.deleted(`departamentos/${this.objeto.id}`)
+      http.deleted(`institucion/${this.objeto.id}`)
         .then((respuesta) => {
-          this.departamentos.splice(this.key, 1);
+          this.instituciones.splice(this.key, 1);
           this.Success({ title: 'Eliminado con éxito', message: respuesta.mensaje });
-          this.modal_eliminar = false;
-          this.objeto = {};
-          this.key = '';
+          this.limpiar();
         }).catch(error => this.Error(error));
+    },
+    limpiar() {
+      this.modal_nuevo_activado = false;
+      this.modal_eliminar = false;
+      this.objeto = {};
+      this.key = '';
     },
   },
 };

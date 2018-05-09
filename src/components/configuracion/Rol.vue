@@ -5,12 +5,12 @@
       <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li><a href="#">Configuración</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Departamentos</a></li>
+          <li class="is-active"><a href="#" aria-current="page">Roles</a></li>
         </ul>
       </nav>
     </div>
     <!-- breadcrumb -->
-    <h1 class="title is-2"> Departamentos </h1>
+    <h1 class="title is-2"> Roles </h1>
     <a class="button is-rounded is-success" @click="modalNuevo()">
       <span>Crear Nuevo</span>
       <span class="icon">
@@ -35,22 +35,22 @@
         </tr>
       </tfoot>
       <tbody>
-        <tr v-for="(departamento, key) in departamentos" :key="key">
+        <tr v-for="(rol, key) in roles" :key="key">
           <template>
-          <td>{{ departamento.id }}</td>
-          <td>{{ departamento.nombre }}</td>
-          <td>
-            <a class="color-edit" @click="editarItem(departamento, key)">
-              <span class="icon">
-                <icon name="edit" scale="1.5" class="color-amarillo"></icon>
-              </span>
-            </a>
-            <a @click="modalEliminar(departamento, key)">
-              <span class="icon">
-                <icon name="trash" scale="1.5" class="color-rojo"></icon>
-              </span>
-            </a>
-          </td>
+            <td>{{ rol.id }}</td>
+            <td>{{ rol.nombre }}</td>
+            <td>
+              <a class="color-edit" @click="editarItem(rol, key)">
+                <span class="icon">
+                  <icon name="edit" scale="1.5" class="color-amarillo"></icon>
+                </span>
+              </a>
+              <a @click="modalEliminar(rol, key)">
+                <span class="icon">
+                  <icon name="trash" scale="1.5" class="color-rojo"></icon>
+                </span>
+              </a>
+            </td>
           </template>
         </tr>
       </tbody>
@@ -60,14 +60,14 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">{{ accion }} Departamento</p>
+          <p class="modal-card-title">{{ accion }} Rol</p>
           <button class="delete" aria-label="close" @click="cerrarModalNuevo()"></button>
         </header>
         <section class="modal-card-body">
           <input
             class="input"
             type="text"
-            placeholder="Nombre Departamento"
+            placeholder="Nombre Rol"
             v-model="objeto.nombre"
           />
         </section>
@@ -120,7 +120,7 @@ import http from '../../common/generals/js/DataService';
 export default {
   data() {
     return {
-      departamentos: '',
+      roles: '',
       modal_nuevo_activado: false,
       objeto: {},
       key: '',
@@ -130,9 +130,9 @@ export default {
   },
   notifications: Mensajes.mensajes,
   created() {
-    http.get('departamentos')
+    http.get('rol')
       .then((respuesta) => {
-        this.departamentos = respuesta.datos;
+        this.roles = respuesta.datos;
       })
       .catch((error) => {
         this.Error(error);
@@ -159,32 +159,28 @@ export default {
       }
     },
     crear(data) {
-      http.post('departamentos', data)
+      http.post('rol', data)
         .then((respuesta) => {
-          const nuevoDepartamento = {
+          const nuevoRol = {
             id: respuesta.datos.id,
             nombre: respuesta.datos.nombre,
           };
-          this.departamentos.push(nuevoDepartamento);
+          this.roles.push(nuevoRol);
           this.Success({ title: 'Guardado con éxito', message: respuesta.mensaje });
-          this.modal_nuevo_activado = false;
-          this.objeto = {};
-          this.key = '';
+          this.limpiar();
         })
         .catch(error => this.Error(error));
     },
     actualizar(item, data) {
-      http.put(`departamentos/${item.id}`, data)
+      http.put(`rol/${item.id}`, data)
         .then((respuesta) => {
-          const nuevoDepartamento = {
+          const nuevoRol = {
             id: respuesta.datos.id,
             nombre: respuesta.datos.nombre,
           };
-          this.departamentos.splice(this.key, 1, nuevoDepartamento);
+          this.roles.splice(this.key, 1, nuevoRol);
           this.Success({ title: 'Actualizado con éxito', message: respuesta.mensaje });
-          this.modal_nuevo_activado = false;
-          this.objeto = {};
-          this.key = '';
+          this.limpiar();
         })
         .catch(error => this.Error(error));
     },
@@ -205,14 +201,18 @@ export default {
       this.key = '';
     },
     eliminar() {
-      http.deleted(`departamentos/${this.objeto.id}`)
+      http.deleted(`rol/${this.objeto.id}`)
         .then((respuesta) => {
-          this.departamentos.splice(this.key, 1);
+          this.roles.splice(this.key, 1);
           this.Success({ title: 'Eliminado con éxito', message: respuesta.mensaje });
-          this.modal_eliminar = false;
-          this.objeto = {};
-          this.key = '';
+          this.limpiar();
         }).catch(error => this.Error(error));
+    },
+    limpiar() {
+      this.modal_nuevo_activado = false;
+      this.modal_eliminar = false;
+      this.objeto = {};
+      this.key = '';
     },
   },
 };

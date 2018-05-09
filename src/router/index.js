@@ -4,6 +4,8 @@ import Inicio from '@/components/Inicio';
 import Otro from '@/components/Otro';
 // rutas de configuracion
 import Departamento from '@/components/configuracion/Departamento';
+import Roles from '@/components/configuracion/Rol';
+import Institucion from '@/components/configuracion/Institucion';
 
 import Contactos from '@/components/Contactos';
 import Login from '@/auth/Login';
@@ -43,6 +45,18 @@ export default new Router({
       path: '/departamentos',
       name: 'Departamento',
       component: Departamento,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/roles',
+      name: 'Roles',
+      component: Roles,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/institucion',
+      name: 'Institucion',
+      component: Institucion,
       meta: { requiresAuth: true },
     },
     {

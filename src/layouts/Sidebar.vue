@@ -31,7 +31,7 @@
         </router-link></li>
         <li><router-link :to="{name:'Contactos'}">
           <span class="icon">
-            <icon name="credit-card" scale="1.5"></icon>
+            <icon name="warehouse" scale="1.5"></icon>
           </span>
           <span class="espacio">Proyectos</span>
         </router-link></li>
@@ -53,7 +53,7 @@
             </router-link>
           </li>
           <li>
-            <router-link :to="{name: 'Inicio'}">
+            <router-link :to="{name: 'Roles'}">
               <span class="espacio-submenu"></span>
               <span class="icon">
                 <icon name="id-card" scale="1.5"></icon>
@@ -71,7 +71,7 @@
             </router-link>
           </li>
           <li>
-            <router-link :to="{name: 'Inicio'}">
+            <router-link :to="{name: 'Institucion'}">
               <span class="espacio-submenu"></span>
               <span class="icon">
                 <icon name="italic" scale="1.5"></icon>
@@ -207,7 +207,7 @@ export default {
 
  /* segundo nivel */
 
-.menu-dinamico ul li ul li {
+ .menu-dinamico ul li ul li {
    background-color: #272c33;
    border-bottom: solid 1px gray;
    width: 250px;
