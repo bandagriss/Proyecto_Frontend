@@ -5,12 +5,12 @@
       <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li><a href="#">Configuración</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Instituciones</a></li>
+          <li class="is-active"><a href="#" aria-current="page">Usuarios</a></li>
         </ul>
       </nav>
     </div>
     <!-- breadcrumb -->
-    <h1 class="title is-2"> Instituciones </h1>
+    <h1 class="title is-2"> Usuarios </h1>
     <a class="button is-rounded is-success" @click="modalNuevo()">
       <span>Crear Nuevo</span>
       <span class="icon">
@@ -23,32 +23,44 @@
       <thead>
         <tr>
           <th><abbr title="Identificador">ID</abbr></th>
-          <th>Nombre</th>
-          <th>Departamento</th>
+          <th>Nombres</th>
+          <th>Apellido Paterno</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Institución</th>
           <th>Opciones</th>
         </tr>
       </thead>
       <tfoot>
         <tr>
           <th><abbr title="Identificador">ID</abbr></th>
-          <th>Nombre</th>
-          <th> Departamento</th>
+          <th>Nombres</th>
+          <th>Apellido Paterno</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Institución</th>
           <th>Opciones</th>
         </tr>
       </tfoot>
       <tbody>
-        <tr v-for="(institucion, key) in instituciones" :key="key">
+        <tr v-for="(usuario, key) in usuarios" :key="key">
           <template>
-            <td>{{ institucion.id }}</td>
-            <td>{{ institucion.nombre }}</td>
-            <td>{{ institucion.Departamento.nombre }}</td>
+            <td>{{ usuario.id }}</td>
+            <td>{{ usuario.nombres }}</td>
+            <td>{{ usuario.apellido_paterno }}</td>
+            <td>{{ usuario.telefono }}</td>
+            <td>{{ usuario.correo }}</td>
+            <td>{{ usuario.Rol.nombre }}</td>
+            <td>{{ usuario.Institucion.nombre }}</td>
             <td>
-              <a class="color-edit" @click="editarItem(institucion, key)">
+              <a class="color-edit" @click="editarItem(usuario, key)">
                 <span class="icon">
                   <icon name="edit" scale="1.5" class="color-amarillo"></icon>
                 </span>
               </a>
-              <a @click="modalEliminar(institucion, key)">
+              <a @click="modalEliminar(usuario, key)">
                 <span class="icon">
                   <icon name="trash" scale="1.5" class="color-rojo"></icon>
                 </span>
@@ -63,7 +75,7 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">{{ accion }} Institución</p>
+          <p class="modal-card-title">{{ accion }} Usuario</p>
           <button class="delete" aria-label="close" @click="cerrarModalNuevo()"></button>
         </header>
         <section class="modal-card-body">
@@ -157,7 +169,7 @@ import http from '../../common/generals/js/DataService';
 export default {
   data() {
     return {
-      instituciones: '',
+      usuarios: '',
       modal_nuevo_activado: false,
       objeto: {},
       key: '',
@@ -169,16 +181,9 @@ export default {
   },
   notifications: Mensajes.mensajes,
   created() {
-    http.get('institucion')
+    http.get('usuarios')
       .then((respuesta) => {
-        this.instituciones = respuesta.datos;
-      })
-      .catch((error) => {
-        this.Error(error);
-      });
-    http.get('departamentos')
-      .then((respuesta) => {
-        this.departamentos = respuesta.datos;
+        this.usuarios = respuesta.datos;
       })
       .catch((error) => {
         this.Error(error);
@@ -210,9 +215,9 @@ export default {
       }
     },
     crear(data) {
-      http.post('institucion', data)
+      http.post('usuarios', data)
         .then((respuesta) => {
-          const nuevoInstitución = {
+          const nuevoUsuario = {
             id: respuesta.datos.id,
             nombre: respuesta.datos.nombre,
             descripcion: respuesta.datos.descripcion,
@@ -222,16 +227,16 @@ export default {
             },
           };
 
-          this.instituciones.push(nuevoInstitución);
+          this.usuarios.push(nuevoUsuario);
           this.Success({ title: 'Guardado con éxito', message: respuesta.mensaje });
           this.limpiar();
         })
         .catch(error => this.Error(error));
     },
     actualizar(item, data) {
-      http.put(`institucion/${item.id}`, data)
+      http.put(`usuarios/${item.id}`, data)
         .then((respuesta) => {
-          const nuevoInstitución = {
+          const nuevoUsuario = {
             id: respuesta.datos.id,
             nombre: respuesta.datos.nombre,
             descripcion: respuesta.datos.descripcion,
@@ -240,7 +245,7 @@ export default {
               nombre: respuesta.datos.Departamento.nombre,
             },
           };
-          this.instituciones.splice(this.key, 1, nuevoInstitución);
+          this.usuarios.splice(this.key, 1, nuevoUsuario);
           this.Success({ title: 'Actualizado con éxito', message: respuesta.mensaje });
           this.limpiar();
         })
@@ -264,9 +269,9 @@ export default {
       this.key = '';
     },
     eliminar() {
-      http.deleted(`institucion/${this.objeto.id}`)
+      http.deleted(`usuarios/${this.objeto.id}`)
         .then((respuesta) => {
-          this.instituciones.splice(this.key, 1);
+          this.usuarios.splice(this.key, 1);
           this.Success({ title: 'Eliminado con éxito', message: respuesta.mensaje });
           this.limpiar();
         }).catch(error => this.Error(error));

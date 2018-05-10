@@ -6,6 +6,7 @@ import Otro from '@/components/Otro';
 import Departamento from '@/components/configuracion/Departamento';
 import Roles from '@/components/configuracion/Rol';
 import Institucion from '@/components/configuracion/Institucion';
+import Usuario from '@/components/configuracion/Usuario';
 
 import Contactos from '@/components/Contactos';
 import Login from '@/auth/Login';
@@ -57,6 +58,12 @@ export default new Router({
       path: '/institucion',
       name: 'Institucion',
       component: Institucion,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/usuarios',
+      name: 'Usuario',
+      component: Usuario,
       meta: { requiresAuth: true },
     },
     {

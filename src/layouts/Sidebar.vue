@@ -45,7 +45,7 @@
         </li>
         <ul v-if="submenu" class="submenu">
           <li>
-            <router-link :to="{name: 'Inicio'}">
+            <router-link :to="{name: 'Usuario'}">
               <span class="espacio-submenu"></span>
               <span class="icon">
                 <icon name="users" scale="1.5"></icon>
