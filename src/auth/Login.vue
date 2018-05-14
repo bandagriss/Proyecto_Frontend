@@ -26,7 +26,7 @@
               <div class="field">
                 <div class="control">
                   <input class="input is-large"
-                         type="email"
+                         type="text"
                          placeholder="Usuario"
                          autofocus=""
                          v-model="credenciales.email"
@@ -52,8 +52,8 @@
               <button
                 type="submit"
                 class="button is-block is-info is-large"
-                @click="submit"
-                @enter="submit"
+                @click="autenticar()"
+                @enter="autenticar()"
               > Autenticarse</button>
             </form>
           </div>
@@ -85,7 +85,7 @@ export default {
   },
   notifications: Mensajes.mensajes,
   methods: {
-    submit() {
+    autenticar() {
       const credenciales = {
         username: this.credenciales.email,
         password: this.credenciales.password,

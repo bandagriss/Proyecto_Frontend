@@ -1,8 +1,9 @@
 import axios from 'axios';
 import router from '../router';
+import config from '../config';
 
 
-const API_URL = 'http://localhost:3000/';
+const API_URL = config.API_REST;
 const LOGIN_URL = `${API_URL}auth`;
 const SIGNUP_URL = `${API_URL}users/`;
 

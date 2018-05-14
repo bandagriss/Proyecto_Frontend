@@ -26,7 +26,7 @@ function ErrorMensaje(error) {
   } else if (error.response.status === 400) {
     return {
       title: 'Ocurrió un error',
-      message: error,
+      message: error.response.data.error,
     };
   }
   return {
@@ -48,7 +48,9 @@ function post(url, data) {
   return new Promise((resolve, reject) => {
     axios.post(`${config.API_REST_PRIVADA}${url}`, data, head())
       .then(respuesta => resolve(respuesta.data))
-      .catch(error => reject(ErrorMensaje(error)));
+      .catch((error) => {
+        reject(ErrorMensaje(error));
+      });
   });
 }
 
