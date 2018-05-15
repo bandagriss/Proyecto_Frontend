@@ -89,6 +89,7 @@
                     type="text"
                     placeholder=""
                     v-model="objeto.nombres"
+                    @change="detectarCambios(objeto.nombres, 'nombres')"
                   />
                 </div>
               </div>
@@ -102,6 +103,7 @@
                     type="text"
                     placeholder=""
                     v-model="objeto.apellido_paterno"
+                    @change="detectarCambios(objeto.apellido_paterno, 'apellido_paterno')"
                   />
                 </div>
               </div>
@@ -115,6 +117,7 @@
                     type="text"
                     placeholder=""
                     v-model="objeto.apellido_materno"
+                    @change="detectarCambios(objeto.apellido_materno, 'apellido_materno')"
                   />
                 </div>
               </div>
@@ -130,6 +133,7 @@
                     type="text"
                     placeholder=""
                     v-model="objeto.telefono"
+                    @change="detectarCambios(objeto.telefono, 'telefono')"
                   />
                 </div>
               </div>
@@ -143,6 +147,7 @@
                     type="text"
                     placeholder=""
                     v-model="objeto.correo"
+                    @change="detectarCambios(objeto.correo, 'correo')"
                   />
                 </div>
               </div>
@@ -153,7 +158,9 @@
                 <div class="field has-addons">
                   <div class="control is-expanded">
                     <div class="select is-fullwidth">
-                      <select name="role" v-model="rol_selected">
+                      <select name="role"
+                              v-model="rol_selected"
+                              @change="detectarCambios(rol_selected, 'fid_rol')">
                         <option
                           v-for="(rol, key) in roles"
                           :value="rol.id"
@@ -171,21 +178,6 @@
           <div class="columns is-mobile">
             <div class="column is-4">
               <div class="field">
-                <label class="label" for="">Carnet</label>
-                <div class="control">
-                  <input
-                    class="input"
-                    type="text"
-                    placeholder=""
-                    v-model="objeto.nro_carnet"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="columns is-mobile">
-            <div class="column is-4">
-              <div class="field">
                 <label class="label" for="">Username</label>
                 <div class="control">
                   <input
@@ -193,19 +185,21 @@
                     type="text"
                     placeholder=""
                     v-model="objeto.username"
+                    @change="detectarCambios(objeto.username, 'username')"
                   />
                 </div>
               </div>
             </div>
             <div class="column is-4">
               <div class="field">
-                <label class="label" for="">Password</label>
+                <label class="label" for="">Carnet</label>
                 <div class="control">
                   <input
                     class="input"
-                    type="password"
+                    type="text"
                     placeholder=""
-                    v-model="objeto.password"
+                    v-model="objeto.nro_carnet"
+                    @change="detectarCambios(objeto.nro_carnet, 'nro_carnet')"
                   />
                 </div>
               </div>
@@ -216,7 +210,10 @@
                 <div class="field has-addons">
                   <div class="control is-expanded">
                     <div class="select is-fullwidth">
-                      <select name="country" v-model="institucion_selected">
+                      <select name="country"
+                              v-model="institucion_selected"
+                              @change="detectarCambios(institucion_selected, 'fid_institucion')"
+                      >
                         <option
                           v-for="(institucion, key) in instituciones"
                           :value="institucion.id"
@@ -291,6 +288,7 @@ export default {
       institucion_selected: '',
       roles: '',
       rol_selected: '',
+      datos_ingresados: {},
     };
   },
   notifications: Mensajes.mensajes,
@@ -333,15 +331,7 @@ export default {
       this.key = '';
     },
     guardarItem(item) {
-      /* const data = {
-       *   nombre: this.objeto.nombre,
-       *   descripcion: this.objeto.descripcion,
-       *   fid_institucion: this.selected,
-       * }; */
-      const data = this.objeto;
-      data.fid_institucion = this.institucion_selected;
-      data.fid_rol = this.rol_selected;
-
+      const data = this.datos_ingresados;
       if (item.id) {
         this.actualizar(item, data);
       } else {
@@ -351,17 +341,7 @@ export default {
     crear(data) {
       http.post('usuarios', data)
         .then((respuesta) => {
-          /* const nuevoUsuario = {
-           *   id: respuesta.datos.id,
-           *   nombre: respuesta.datos.nombre,
-           *   descripcion: respuesta.datos.descripcion,
-           *   Departamento: {
-           *     id: respuesta.datos.Departamento.id,
-           *     nombre: respuesta.datos.Departamento.nombre,
-           *   },
-           * }; */
           const nuevoUsuario = respuesta.datos;
-
           this.usuarios.push(nuevoUsuario);
           this.Success({ title: 'Guardado con éxito', message: respuesta.mensaje });
           this.limpiar();
@@ -373,15 +353,6 @@ export default {
     actualizar(item, data) {
       http.put(`usuarios/${item.id}`, data)
         .then((respuesta) => {
-          /* const nuevoUsuario = {
-           *   id: respuesta.datos.id,
-           *   nombre: respuesta.datos.nombre,
-           *   descripcion: respuesta.datos.descripcion,
-           *   Departamento: {
-           *     id: respuesta.datos.Departamento.id,
-           *     nombre: respuesta.datos.Departamento.nombre,
-           *   },
-           * }; */
           const nuevoUsuario = respuesta.datos;
           this.usuarios.splice(this.key, 1, nuevoUsuario);
           this.Success({ title: 'Actualizado con éxito', message: respuesta.mensaje });
@@ -422,6 +393,10 @@ export default {
       this.key = '';
       this.rol_selected = '';
       this.institucion_selected = '';
+      this.datos_ingresados = {};
+    },
+    detectarCambios(dato, objeto) {
+      this.datos_ingresados[objeto] = dato;
     },
   },
 };
