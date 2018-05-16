@@ -1,11 +1,11 @@
 const mensajes = {
   Error: {
-    title: 'Login Failed',
+    title: 'Error',
     message: 'failed error',
     type: 'error',
   },
   Success: {
-    title: 'Login Failed',
+    title: 'Consulta éxitosa',
     message: 'Failed to authenticate',
     type: 'success',
   },

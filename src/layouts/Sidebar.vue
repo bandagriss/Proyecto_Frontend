@@ -24,7 +24,7 @@
           </span>
           <span class="espacio">Inicio</span>
         </router-link></li>
-        <li><router-link :to="{name:'Otro'}">
+        <li><router-link :to="{name:'Financiadores'}">
           <span class="icon">
             <icon name="users" scale="1.5"></icon>
           </span>

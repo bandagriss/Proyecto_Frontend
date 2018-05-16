@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Inicio from '@/components/Inicio';
-import Otro from '@/components/Otro';
+import Financiadores from '@/components/Financiador';
 // rutas de configuracion
 import Departamento from '@/components/configuracion/Departamento';
 import Roles from '@/components/configuracion/Rol';
@@ -26,9 +26,9 @@ export default new Router({
       meta: { requiresAuth: true },
     },
     {
-      path: '/otro',
-      name: 'Otro',
-      component: Otro,
+      path: '/financiadores',
+      name: 'Financiadores',
+      component: Financiadores,
       meta: { requiresAuth: true },
     },
     {
