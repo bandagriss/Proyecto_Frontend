@@ -1,6 +1,7 @@
 <template>
   <div class="fondo-contenido">
     <h1 class="title is-2">Financiadores</h1>
+
     <a class="button is-rounded is-success" @click="modalNuevo()">
       <span>Crear Nuevo</span>
       <span class="icon">
@@ -59,6 +60,47 @@
           <button class="delete" aria-label="close" @click="cerrarModalNuevo()"></button>
         </header>
         <section class="modal-card-body">
+          <div class="columns is-mobile">
+            <div class="column is-12">
+              <template v-if="imagenLogo">
+                <center>
+                  <!-- <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com" style="width:104px;height:142px;"> -->
+                  <img :src="rutaImagen" alt="W3Schools.com" style="width:200px;height:200px;">
+                  <br/>
+                  <button @click="cambiarImagen"
+                          class="button is-default"
+                  >
+                    Cambiar Imagen
+                  </button>
+                </center>
+              </template>
+              <template v-else>
+                <picture-input
+                  ref="pictureInput"
+                  @change="onChanged"
+                  @remove="onRemoved"
+                  :width="200"
+                  :removable="true"
+                  removeButtonClass="ui red button"
+                  :height="200"
+                  accept="image/jpeg, image/png, image/gif"
+                  buttonClass="ui button primary"
+                  :customStrings="{
+                       upload: '<h1>Upload it!</h1>',
+                       drag: 'Arrastra tu imagen aqui'}">
+
+                </picture-input>
+                <center>
+                  <button @click="attemptUpload"
+                          v-bind:class="{ disabled: !image } "
+                          class="button is-primary"
+                  >
+                    Subir Imagen
+                  </button>
+                </center>
+              </template>
+            </div>
+          </div>
           <div class="columns is-mobile">
             <div class="column is-6">
               <div class="field">
@@ -155,32 +197,6 @@
               </div>
             </div>
           </div>
-          <div class="columns is-mobile">
-            <div class="column is-12">
-              <img :src="image"/>
-              <div class="field">
-                <label class="label">Logo</label>
-                <div class="control">
-                  <div class="file is-boxed">
-                    <label class="file-label">
-                      <input class="file-input"
-                             type="file"
-                             @change="onFileChange"
-                      >
-                      <span class="file-cta">
-                        <span class="file-icon">
-                          <i class="fas fa-upload"></i>
-                        </span>
-                        <span class="file-label">
-                          Escoge una imagen...
-                        </span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </section>
         <footer class="modal-card-foot">
           <button class="button is-success" @click="guardar()">Guardar</button>
@@ -223,8 +239,10 @@
 
 <script>
 
+import PictureInput from 'vue-picture-input';
 import Mensajes from '../common/generals/js/Notificacion';
 import http from '../common/generals/js/DataService';
+import config from '../config';
 
 export default {
   data() {
@@ -237,7 +255,12 @@ export default {
       key: '',
       modal_eliminar: false,
       image: '',
+      imagenLogo: false,
+      rutaImagen: '',
     };
+  },
+  components: {
+    PictureInput,
   },
   notifications: Mensajes.mensajes,
   created() {
@@ -256,6 +279,9 @@ export default {
       this.key = '';
       this.accion = 'Crear';
       this.image = '';
+      this.imagenLogo = false;
+      this.$refs.pictureInput.previewHeight = 200;
+      this.$refs.pictureInput.previewWidth = 200;
     },
     modalEditar(item, key) {
       this.modal_nuevo_activado = true;
@@ -263,12 +289,19 @@ export default {
       this.datos_ingresados = {};
       this.key = key;
       this.accion = 'Actualizar';
+      this.imagenLogo = !!item.logo;
+      if (this.imagenLogo) {
+        this.$refs.pictureInput.previewHeight = 200;
+        this.$refs.pictureInput.previewWidth = 200;
+        this.rutaImagen = `${config.API_REST}${item.logo}`;
+      }
     },
     cerrarModalEliminar() {
       this.modal_eliminar = false;
     },
     cerrarModalNuevo() {
       this.modal_nuevo_activado = false;
+      this.imagenLogo = false;
     },
     modalEliminar(item, key) {
       this.objeto = JSON.parse(JSON.stringify(item));
@@ -306,18 +339,28 @@ export default {
         this.modal_eliminar = false;
       }).catch(error => this.Error(error));
     },
-    onFileChange(e) {
-      const files = e.target.files || e.dataTransfer.files;
-      if (!files.length) { return; }
-      this.createImage(files[0]);
+    onChanged() {
+      this.image = this.$refs.pictureInput.file;
     },
-    createImage(file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.image = e.target.result;
-        this.datos_ingresados = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    onRemoved() {
+      this.image = '';
+    },
+    attemptUpload() {
+      if (this.image) {
+        http.image('financiador/imagen', this.image)
+          .then((respuesta) => {
+            this.image = '';
+            this.Success({ title: 'Imagen guardada', message: respuesta.mensaje });
+            this.datos_ingresados.logo = respuesta.datos.path.replace('public/', '');
+            this.imagenLogo = true;
+            this.rutaImagen = `${config.API_REST}${this.datos_ingresados.logo}`;
+            document.querySelector('.ui.red.button').click();
+          })
+          .catch(error => this.Error(error));
+      }
+    },
+    cambiarImagen() {
+      this.imagenLogo = false;
     },
   },
 };

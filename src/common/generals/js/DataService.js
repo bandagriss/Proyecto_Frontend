@@ -70,6 +70,29 @@ function deleted(url) {
   });
 }
 
+function image(url, file, name = 'avatar') {
+  return new Promise((resolve, reject) => {
+    if (typeof url !== 'string') {
+      throw new TypeError(`Expected a string, got ${typeof url}`);
+    }
+    const formData = new FormData();
+    formData.append(name, file);
+    const headConfig = {
+      headers: {
+        'content-type': 'multipart/form-data',
+        Authorization: `Bearer ${localStorage.getItem('id_token')}`,
+      },
+    };
+
+    return axios.post(`${config.API_REST_PRIVADA}${url}`, formData, headConfig)
+      .then(respuesta => resolve(respuesta.data))
+      .catch((error) => {
+        reject(ErrorMensaje(error));
+      });
+  });
+}
+
+
 export default {
-  get, post, put, deleted,
+  get, post, put, deleted, image,
 };
