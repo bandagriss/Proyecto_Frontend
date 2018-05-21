@@ -291,9 +291,10 @@ export default {
       this.accion = 'Actualizar';
       this.imagenLogo = !!item.logo;
       if (this.imagenLogo) {
+        this.rutaImagen = `${config.API_REST}${item.logo}`;
+      } else {
         this.$refs.pictureInput.previewHeight = 200;
         this.$refs.pictureInput.previewWidth = 200;
-        this.rutaImagen = `${config.API_REST}${item.logo}`;
       }
     },
     cerrarModalEliminar() {
