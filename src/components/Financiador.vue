@@ -147,14 +147,17 @@
             <div class="column is-6">
               <div class="field">
                 <label class="label">Fecha Fundación</label>
-                <div class="control">
-                  <input class="input"
-                         type="text"
-                         placeholder="Fundación"
-                         v-model="objeto.fecha_fundacion"
-                         @change="detectarCambios(objeto.fecha_fundacion, 'fecha_fundacion')"
-                  />
-                </div>
+                <datepicker
+                  placeholder="('d-m-Y')"
+                  :config="{ dateFormat: 'm-d-Y',
+                               static: true,
+                               onOpen: this.detectarCambios(
+                               objeto.fecha_fundacion,
+                               'fecha_fundacion')
+                               }"
+                  v-model="objeto.fecha_fundacion"
+                >
+                </datepicker>
               </div>
             </div>
             <div class="column is-6">
@@ -240,9 +243,11 @@
 <script>
 
 import PictureInput from 'vue-picture-input';
+import Datepicker from 'vue-bulma-datepicker';
 import Mensajes from '../common/generals/js/Notificacion';
 import http from '../common/generals/js/DataService';
 import config from '../config';
+
 
 export default {
   data() {
@@ -261,6 +266,7 @@ export default {
   },
   components: {
     PictureInput,
+    Datepicker,
   },
   notifications: Mensajes.mensajes,
   created() {
