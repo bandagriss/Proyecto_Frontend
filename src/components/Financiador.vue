@@ -64,8 +64,7 @@
             <div class="column is-12">
               <template v-if="imagenLogo">
                 <center>
-                  <!-- <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com" style="width:104px;height:142px;"> -->
-                  <img :src="rutaImagen" alt="W3Schools.com" style="width:200px;height:200px;">
+                  <img :src="rutaImagen" style="width:200px;height:200px;">
                   <br/>
                   <button @click="cambiarImagen"
                           class="button is-default"

@@ -39,7 +39,6 @@ export default {
   },
   created() {
     EventBus.$on('menuClickContenido', (activo) => {
-      /* console.log(`llega al container`); */
       this.activo = activo;
     });
   },

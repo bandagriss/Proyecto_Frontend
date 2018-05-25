@@ -1,16 +1,25 @@
 <template>
   <div id="sidebar" :class="activo? 'active' : ''">
     <div class="organizacion">
-      <h1 class="is-size-1 has-text-white has-text-centered has-text-weight-normal">CEADL</h1>
+      <figure class="image is-256x256">
+        <img src="../assets/imagenes/ceadl/logo-ceadl3.png">
+      </figure>
     </div>
     <div class="marco-imagen">
       <div class="imagen-usuario">
         <figure class="image is-256x256 imagen-usuario">
           <!-- <img src="https://images5.alphacoders.com/413/413842.jpg"> -->
-          <img src="../assets/naruto.jpg">
+          <template v-if="!imagen_usuario">
+            <h1>{{ imagen_usuario }}</h1>
+            <img :src="imagen_usuario">
+          </template>
+          <template v-else>
+            <img src="../assets/imagenes/ceadl/usuario_imagen.jpg">
+          </template>
+
         </figure>
         <div class="datos-usuario">
-          Nivel: {{ rol_usuario }}
+          Rol: {{ rol_usuario }}
           <br/>
           {{ nombre_usuario }}
         </div>
@@ -89,19 +98,16 @@
 <script>
 
 import EventBus from './event-bus';
-
-/* EventBus.$on('menuClick', (activo) => {
-  *   console.log(`actual this activo ${ this.activo}`);
-  *   this.activo = activo;
-  * }); */
+import auth from '../auth';
 
 export default {
   data() {
     return {
       activo: false,
-      nombre_usuario: 'Naruto Uzumaki',
-      rol_usuario: 'Administrador',
+      nombre_usuario: `${auth.user.nombres} ${auth.user.apellido_paterno ? auth.user.apellido_paterno : ''} ${auth.user.apellido_materno ? auth.user.apellido_materno : ''}`,
+      rol_usuario: auth.user.rol_nombre,
       submenu: false,
+      imagen_usuario: `${auth.user.imagen_usuario ? auth.user.imagen_usuario : false}`,
     };
   },
   created() {

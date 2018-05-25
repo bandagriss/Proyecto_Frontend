@@ -2,26 +2,28 @@
   <section class="hero is-ligth is-fullheight">
     <div class="fondo-login"></div>
     <section class="hero is-info">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Sistema
-          </h1>
-          <h2 class="subtitle">
-            Ingeniería Contable
-          </h2>
-        </div>
-      </div>
+      <!-- <div class="hero-body">
+           <div class="container">
+           <h1 class="title">
+           Sistema
+           </h1>
+           <h2 class="subtitle">
+           de Control de Proyectos
+           </h2>
+           </div>
+           </div> -->
     </section>
     <div class="hero-body alinear-arriba">
       <div class="container has-text-centered">
         <div class="column is-4 is-offset-4">
+          <h1 class="title is-2">
+            Proyectos CEADL
+          </h1>
+
           <div class="box">
             <figure class="avatar">
-              <!-- <img src="https://placehold.it/128x128"> -->
-              <img src="https://i.pinimg.com/originals/30/1b/3b/301b3b874454b97ffb7cc550a25af0ce.jpg" width="128" height="128">
+              <img src="../assets/imagenes/ceadl/logo-ceadl2.png" width="256" height="256">
             </figure>
-            <!-- <h1 class="title is-1">{{ error }}</h1> -->
             <form>
               <div class="field">
                 <div class="control">
@@ -135,12 +137,12 @@ export default {
  }
  .avatar {
    margin-top: -70px;
-   padding-bottom: 20px;
+   padding-bottom: 30px;
  }
  .avatar img {
    padding: 5px;
    background: #fff;
-   border-radius: 50%;
+   border-radius: 5%;
    -webkit-box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
  }
@@ -159,7 +161,7 @@ export default {
    top: 0;
    width: 100%;
    height: 100%;
-   background-image: url('http://d11xat3a80dbp1.cloudfront.net/wp-content/uploads/2016/09/hierba_de_San_Juan.jpg');
+   background-image: url('../assets/imagenes/ceadl/fondo_login.jpg');
    background-repeat: no-repeat;
    background-size: 100%;
    background-size: cover;

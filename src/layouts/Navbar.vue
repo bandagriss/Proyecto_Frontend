@@ -53,9 +53,9 @@ import auth from '../auth';
 export default {
   data() {
     return {
-      titulo: 'Sistema de Ingenieria Contable',
+      titulo: auth.user.institucion,
       burgerActive: false,
-      usuario: 'roy',
+      usuario: auth.user.nombres,
       activo: false,
     };
   },
