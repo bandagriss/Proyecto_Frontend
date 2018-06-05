@@ -1,6 +1,6 @@
 <template>
   <div class="fondo-contenido">
-    <h1 class="title is-2">Crear Proyecto</h1>
+    <h1 class="title is-2">Editar Proyecto</h1>
     <div class="field is-horizontal">
       <div class="field-label is-normal">
         <label class="label">Financiador</label>
@@ -156,11 +156,11 @@
       <div class="field-body">
         <div class="field">
           <div class="control">
-      <textarea
-  class="textarea"
-  placeholder="Proyecto dirigido a jóvenes de la zona..."
-  v-model="objeto.objetivo"
-  @change="detectarCambios(objeto.objetivo, 'objetivo')"
+            <textarea
+              class="textarea"
+              placeholder="Proyecto dirigido a jóvenes de la zona..."
+              v-model="objeto.objetivo"
+              @change="detectarCambios(objeto.objetivo, 'objetivo')"
             ></textarea>
           </div>
         </div>
@@ -168,8 +168,8 @@
     </div>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a class="button is-primary" @click="crearProyecto()">
-          Crear
+        <a class="button is-info" @click="actualizarProyecto()">
+          Guardar
         </a>
       </p>
       <p class="control">
@@ -198,6 +198,7 @@ export default {
       cantidad: '',
     };
   },
+  props: ['proyecto_id'],
   components: {
     Datepicker,
   },
@@ -207,23 +208,27 @@ export default {
       this.financiadores = respuesta.datos;
       this.Success({ message: respuesta.mensaje });
     }).catch(error => this.Error(error));
-    this.objeto = {};
+    http.get(`proyecto/${this.$route.params.proyecto_id}`).then((respuesta) => {
+      this.objeto = respuesta.datos;
+      this.financiador_selected = respuesta.datos.fid_financiador;
+      this.cantidad = respuesta.datos.cantidad;
+    }).catch(error => this.Error(error));
   },
   methods: {
     detectarCambios(dato, objeto) {
       this.datos_ingresados[objeto] = dato;
     },
     sumaCantidad(hombres, mujeres) {
-      const totalHombres = hombres != null ? hombres : 0;
-      const totalMujeres = mujeres != null ? mujeres : 0;
-      this.cantidad = parseInt(totalHombres, 10) + parseInt(totalMujeres, 10);
+      const totalHombres = parseInt(hombres != null ? hombres : 0, 10);
+      const totalMujeres = parseInt(mujeres != null ? mujeres : 0, 10);
+      this.cantidad = totalHombres + totalMujeres;
     },
-    crearProyecto() {
+    actualizarProyecto() {
       this.datos_ingresados.cantidad = this.cantidad;
       this.datos_ingresados.fid_financiador = this.financiador_selected;
       this.datos_ingresados.fid_institucion = localStorage.getItem('institucion');
       this.datos_ingresados.codigo_proyecto = 'aabbcc';
-      http.post('proyecto', this.datos_ingresados).then((respuesta) => {
+      http.put(`proyecto/${this.$route.params.proyecto_id}`, this.datos_ingresados).then((respuesta) => {
         this.Success({ title: 'Guardado con éxito', message: respuesta.mensaje });
         router.push('/proyectos');
       }).catch(error => this.Error(error));

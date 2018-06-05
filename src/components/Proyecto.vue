@@ -23,9 +23,37 @@
         <button type="button" class="button is-primary">Listar</button>
       </div>
     </div>
-    <ul v-for="(proyecto, key) in proyectos" :key="key">
-        <li>{{ proyecto.nombre }}</li>
-    </ul>
+
+    <table class="table is-hoverable is-fullwidth is-narrow">
+      <thead>
+        <tr>
+          <th><abbr title="Identificador">ID</abbr></th>
+          <th><abbr title="Nombre">Nombre</abbr></th>
+          <th><abbr title="Opciones">Opciones</abbr></th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th><abbr title="Identificador">ID</abbr></th>
+          <th><abbr title="Nombre">Nombre</abbr></th>
+          <th><abbr title="Opciones">Opciones</abbr></th>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr v-for="(proyecto, key) in proyectos" :key="key">
+            <td>{{ key + 1 }}</td>
+            <td>{{ proyecto.nombre }}</td>
+            <td>
+              <router-link
+                :to="{name: 'ProyectoEditar', params: { proyecto_id: proyecto.id }}"
+                class="button is-primary">
+                Editar
+              </router-link>
+              <button class="button is-warning">Agregar Personas al Proyecto</button>
+            </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -44,10 +72,10 @@ export default {
   components: {
   },
   notifications: Mensajes.mensajes,
-   created() {
-     http.get('proyecto').then((respuesta) => {
-       this.proyectos = respuesta.datos;
-     }).catch(error => this.Error(error));
+  created() {
+    http.get('proyecto').then((respuesta) => {
+      this.proyectos = respuesta.datos;
+    }).catch(error => this.Error(error));
   },
   methods: {
   },

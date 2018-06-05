@@ -10,6 +10,7 @@ import Usuario from '@/components/configuracion/Usuario';
 // proyecto
 import Proyectos from '@/components/Proyecto';
 import NuevoProyecto from '@/components/NuevoProyecto';
+import ProyectoEditar from '@/components/ProyectoEditar';
 
 import Login from '@/auth/Login';
 import Registrarse from '@/auth/Register';
@@ -66,6 +67,12 @@ export default new Router({
       path: '/nuevo_proyecto',
       name: 'NuevoProyecto',
       component: NuevoProyecto,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/editar_proyecto/:proyecto_id',
+      name: 'ProyectoEditar',
+      component: ProyectoEditar,
       meta: { requiresAuth: true },
     },
     {
