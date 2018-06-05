@@ -39,7 +39,7 @@
           </span>
           <span class="espacio">Financiadores</span>
         </router-link></li>
-        <li><router-link :to="{name:'Contactos'}">
+        <li><router-link :to="{name:'Proyectos'}">
           <span class="icon">
             <icon name="warehouse" scale="1.5"></icon>
           </span>

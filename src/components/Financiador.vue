@@ -147,7 +147,7 @@
               <div class="field">
                 <label class="label">Fecha Fundación</label>
                 <datepicker
-                  placeholder="('d-m-Y')"
+                  placeholder="('m-d-Y')"
                   :config="{ dateFormat: 'm-d-Y',
                                static: true,
                                onOpen: this.detectarCambios(
@@ -380,7 +380,7 @@ export default {
    color: #ff3860;
  }
  .fondo-contenido {
-   background-color: white;
+   /* background-color: white; */
    padding: 2px 10px 2px 10px;
  }
 </style>

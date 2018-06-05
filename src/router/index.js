@@ -7,8 +7,10 @@ import Departamento from '@/components/configuracion/Departamento';
 import Roles from '@/components/configuracion/Rol';
 import Institucion from '@/components/configuracion/Institucion';
 import Usuario from '@/components/configuracion/Usuario';
+// proyecto
+import Proyectos from '@/components/Proyecto';
+import NuevoProyecto from '@/components/NuevoProyecto';
 
-import Contactos from '@/components/Contactos';
 import Login from '@/auth/Login';
 import Registrarse from '@/auth/Register';
 import PaginaNoEncontrada from '@/auth/404';
@@ -32,9 +34,9 @@ export default new Router({
       meta: { requiresAuth: true },
     },
     {
-      path: '/contactos',
-      name: 'Contactos',
-      component: Contactos,
+      path: '/proyectos',
+      name: 'Proyectos',
+      component: Proyectos,
       meta: { requiresAuth: true },
     },
     {
@@ -58,6 +60,12 @@ export default new Router({
       path: '/institucion',
       name: 'Institucion',
       component: Institucion,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/nuevo_proyecto',
+      name: 'NuevoProyecto',
+      component: NuevoProyecto,
       meta: { requiresAuth: true },
     },
     {

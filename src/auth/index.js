@@ -29,15 +29,16 @@ export default {
         .then((response) => {
           localStorage.setItem('id_token', response.data.token);
           localStorage.setItem('nombres', response.data.data.nombres);
-          localStorage.setItem('apellido_paterno', response.data.data.apellido_paterno);
-          localStorage.setItem('apellido_materno', response.data.data.apellido_materno);
+          localStorage.setItem('apellido_paterno', response.data.data.apellido_paterno != null ? response.data.data.apellido_paterno : '');
+          localStorage.setItem('apellido_materno', response.data.data.apellido_materno != null ? response.data.data.apellido_materno : '');
           localStorage.setItem('imagen_usuario', response.data.data.imagen_usuario);
           localStorage.setItem('rol_nombre', response.data.data.rol_nombre);
+          localStorage.setItem('institucion_nombre', response.data.data.institucion_nombre);
           localStorage.setItem('institucion', response.data.data.institucion);
           // localStorage.setItem('usuario', response.data.usuario);
           this.user.nombres = response.data.data.nombres;
-          this.user.apellido_paterno = response.data.data.apellido_paterno;
-          this.user.apellido_materno = response.data.data.apellido_materno;
+          this.user.apellido_paterno = response.data.data.apellido_paterno != null ? response.data.data.apellido_paterno : '';
+          this.user.apellido_materno = response.data.data.apellido_materno != null ? response.data.data.apellido_materno : '';
           this.user.imagen_usuario = response.data.data.imagen_usuario;
           this.user.rol_nombre = response.data.data.rol_nombre;
           this.user.institucion = response.data.data.institucion;
@@ -69,6 +70,7 @@ export default {
       this.user.apellido_materno = localStorage.getItem('apellido_materno');
       this.user.imagen_usuario = localStorage.getItem('imagen_usuario');
       this.user.rol_nombre = localStorage.getItem('rol_nombre');
+      this.user.institucion_nombre = localStorage.getItem('institucion_nombre');
       this.user.institucion = localStorage.getItem('institucion');
       this.user.authenticated = true;
 
