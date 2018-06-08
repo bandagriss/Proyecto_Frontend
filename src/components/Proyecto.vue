@@ -49,11 +49,60 @@
                 class="button is-primary">
                 Editar
               </router-link>
-              <button class="button is-warning">Agregar Personas al Proyecto</button>
+              <button
+                class="button is-warning"
+                @click="agregarPersonas(proyecto)">
+                Agregar Personas al Proyecto
+              </button>
             </td>
         </tr>
       </tbody>
     </table>
+    <!-- modal nuevo -->
+    <div class="modal" :class="modal_add_personas? 'is-active' : ''">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title"> Financiador</p>
+          <button class="delete" aria-label="close" @click="cerrarModalAddPersonas()"></button>
+        </header>
+        <section class="modal-card-body">
+          <label class="label" for="">Miembros:</label>
+
+          <label class="label" for="">Añadir:</label>
+          <div class="columns">
+            <div class="column is-4">
+              <div class="field">
+                <div class="field has-addons">
+                  <div class="control is-expanded">
+                    <div class="select is-fullwidth">
+                      <select name="role"
+                              v-model="persona_selected">
+                        <option
+                          v-for="(persona, key) in personas"
+                          :value="persona.id"
+                          :key="key"
+                        >
+                          {{ persona.nombres }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="column is-4">
+              <button class="button is-primary" @click="addPersona(persona_selected)">Añadir</button>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="guardar()">Guardar</button>
+          <button class="button" @click="cerrarModalAddPersonas()">Cerrar</button>
+        </footer>
+      </div>
+    </div>
+    <!-- - -->
   </div>
 </template>
 
@@ -67,6 +116,10 @@ export default {
     return {
       financiadores: '',
       proyectos: {},
+      modal_add_personas: false,
+      personas: {},
+      persona_selected: '',
+      objeto: {},
     };
   },
   components: {
@@ -76,8 +129,33 @@ export default {
     http.get('proyecto').then((respuesta) => {
       this.proyectos = respuesta.datos;
     }).catch(error => this.Error(error));
+
+    http.get('usuarios').then((respuesta) => {
+      this.personas = respuesta.datos;
+    });
   },
   methods: {
+    agregarPersonas(proyecto) {
+      this.modal_add_personas = true;
+      this.persona_selected = '';
+      this.objeto = JSON.parse(JSON.stringify(proyecto));
+    },
+    cerrarModalAddPersonas() {
+      this.modal_add_personas = false;
+    },
+    addPersona(id_persona) {
+      if (id_persona != null) {
+        const adicionar_persona = {};
+        adicionar_persona.fid_proyecto = this.objeto.id;
+        adicionar_persona.fid_persona = id_persona;
+        console.log("===================>", adicionar_persona);
+        http.post('proyecto_persona', adicionar_persona).then((respuesta) => {
+          this.Success({ title: 'Añadido con éxito', message: respuesta.mensaje });
+        }).catch(error => this.Error(error));
+      } else {
+        this.Error({ message: 'Selecciona una persona primero' });
+      }
+    },
   },
 };
 </script>
