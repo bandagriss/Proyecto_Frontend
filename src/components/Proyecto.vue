@@ -68,6 +68,9 @@
         </header>
         <section class="modal-card-body">
           <label class="label" for="">Miembros:</label>
+          <ul v-for="(miembro, key) in persona_proyecto" :key="key">
+              <li>{{ miembro.Usuario.nombres }}</li>
+          </ul>
 
           <label class="label" for="">Añadir:</label>
           <div class="columns">
@@ -92,7 +95,12 @@
               </div>
             </div>
             <div class="column is-4">
-              <button class="button is-primary" @click="addPersona(persona_selected)">Añadir</button>
+              <button
+                class="button is-primary"
+                @click="addPersona(persona_selected)"
+              >
+                Añadir
+              </button>
             </div>
           </div>
         </section>
@@ -120,6 +128,7 @@ export default {
       personas: {},
       persona_selected: '',
       objeto: {},
+      persona_proyecto: {},
     };
   },
   components: {
@@ -129,13 +138,20 @@ export default {
     http.get('proyecto').then((respuesta) => {
       this.proyectos = respuesta.datos;
     }).catch(error => this.Error(error));
-
-    http.get('usuarios').then((respuesta) => {
-      this.personas = respuesta.datos;
-    });
   },
   methods: {
     agregarPersonas(proyecto) {
+      // personas
+      http.get('usuarios').then((respuesta) => {
+        this.personas = respuesta.datos;
+      });
+
+      // miembros de proyecto
+      http.get(`proyecto_personas/${proyecto.id}`).then((respuesta) => {
+        this.persona_proyecto = respuesta.datos;
+        this.eliminarMiembrosExistentes(this.persona_proyecto, this.personas);
+      }).catch(error => this.Error(error));
+
       this.modal_add_personas = true;
       this.persona_selected = '';
       this.objeto = JSON.parse(JSON.stringify(proyecto));
@@ -143,18 +159,32 @@ export default {
     cerrarModalAddPersonas() {
       this.modal_add_personas = false;
     },
-    addPersona(id_persona) {
-      if (id_persona != null) {
-        const adicionar_persona = {};
-        adicionar_persona.fid_proyecto = this.objeto.id;
-        adicionar_persona.fid_persona = id_persona;
-        console.log("===================>", adicionar_persona);
-        http.post('proyecto_persona', adicionar_persona).then((respuesta) => {
+    addPersona(idPersona) {
+      if (idPersona !== '') {
+        const adicionarPersona = {};
+        adicionarPersona.fid_proyecto = this.objeto.id;
+        adicionarPersona.fid_persona = idPersona;
+        http.post('proyecto_persona', adicionarPersona).then((respuesta) => {
           this.Success({ title: 'Añadido con éxito', message: respuesta.mensaje });
+          this.persona_proyecto.push(respuesta.datos);
+          this.eliminarMiembrosExistentes(this.persona_proyecto, this.personas);
         }).catch(error => this.Error(error));
       } else {
         this.Error({ message: 'Selecciona una persona primero' });
       }
+    },
+    eliminarMiembrosExistentes(miembros, personas) {
+      const idMiembros = [];
+      for (let m = 0; m < miembros.length; m += 1) {
+        idMiembros.push(miembros[m].Usuario.id);
+      }
+      const vectorPersona = [];
+      for (let i = 0; i < personas.length; i += 1) {
+        if (idMiembros.indexOf(personas[i].id) === -1) {
+          vectorPersona.push(personas[i]);
+        }
+      }
+      this.personas = vectorPersona;
     },
   },
 };
