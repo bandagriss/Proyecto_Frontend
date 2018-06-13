@@ -69,7 +69,14 @@
         <section class="modal-card-body">
           <label class="label" for="">Miembros:</label>
           <ul v-for="(miembro, key) in persona_proyecto" :key="key">
-              <li>{{ miembro.Usuario.nombres }}</li>
+            <li>{{ miembro.Usuario.nombres }}
+              <a @click="eliminarMiembro(miembro, key)">
+                <span class="icon">
+                  <icon name="trash" scale="1.5" style="color:red;"></icon>
+                </span>
+              </a>
+            </li>
+
           </ul>
 
           <label class="label" for="">Añadir:</label>
@@ -185,6 +192,13 @@ export default {
         }
       }
       this.personas = vectorPersona;
+    },
+    eliminarMiembro(miembro, key) {
+      http.deleted(`proyecto_persona/${miembro.id}`).then((respuesta) => {
+        this.Success({ title: 'Eliminado con éxito', message: respuesta.mensaje });
+        this.persona_proyecto.splice(key, 1);
+        this.personas.push(miembro.Usuario);
+      }).catch(error => this.Error(error));
     },
   },
 };
