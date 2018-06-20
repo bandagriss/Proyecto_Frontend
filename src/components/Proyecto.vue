@@ -118,7 +118,6 @@
           </div>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success" @click="guardar()">Guardar</button>
           <button class="button" @click="cerrarModalAddPersonas()">Cerrar</button>
         </footer>
       </div>
@@ -158,13 +157,24 @@
           <div class="field">
             <label class="label">Nombre</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Nombre de Fase">
+              <input
+                class="input"
+                type="text"
+                placeholder="Nombre de Fase"
+                v-model="fase.nombre"
+                @change="detectarCambiosFase(fase.nombre, 'nombre')"
+              >
             </div>
           </div>
           <div class="field">
             <label class="label">Descripción</label>
             <div class="control">
-              <textarea class="textarea" placeholder="Descripción de la Fase"></textarea>
+              <textarea
+                class="textarea"
+                placeholder="Descripción de la Fase"
+                v-model="fase.descripcion"
+                @change="detectarCambiosFase(fase.descripcion, 'descripcion')"
+              ></textarea>
             </div>
           </div>
         </section>
@@ -179,101 +189,110 @@
 
 <script>
 
- import Datepicker from 'vue-bulma-datepicker';
- import Mensajes from '../common/generals/js/Notificacion';
- import http from '../common/generals/js/DataService';
+import Datepicker from 'vue-bulma-datepicker';
+import Mensajes from '../common/generals/js/Notificacion';
+import http from '../common/generals/js/DataService';
 
- export default {
-   data() {
-     return {
-       financiadores: '',
-       proyectos: {},
-       modal_add_personas: false,
-       personas: {},
-       persona_selected: '',
-       objeto: {},
-       persona_proyecto: {},
-       modal_add_fases: false,
-       fase: {},
-     };
-   },
-   components: {
-     Datepicker,
-   },
-   notifications: Mensajes.mensajes,
-   created() {
-     http.get('proyecto').then((respuesta) => {
-       this.proyectos = respuesta.datos;
-     }).catch(error => this.Error(error));
-   },
-   methods: {
-     agregarPersonas(proyecto) {
-       // personas
-       http.get('usuarios').then((respuesta) => {
-         this.personas = respuesta.datos;
-       });
+export default {
+  data() {
+    return {
+      financiadores: '',
+      proyectos: {},
+      modal_add_personas: false,
+      personas: {},
+      persona_selected: '',
+      objeto: {},
+      persona_proyecto: {},
+      modal_add_fases: false,
+      fase: {},
+    };
+  },
+  props: ['value'],
+  components: {
+    Datepicker,
+  },
+  notifications: Mensajes.mensajes,
+  created() {
+    http.get('proyecto').then((respuesta) => {
+      this.proyectos = respuesta.datos;
+    }).catch(error => this.Error(error));
+  },
+  methods: {
+    agregarPersonas(proyecto) {
+      // personas
+      http.get('usuarios').then((respuesta) => {
+        this.personas = respuesta.datos;
+      });
 
-       // miembros de proyecto
-       http.get(`proyecto_personas/${proyecto.id}`).then((respuesta) => {
-         this.persona_proyecto = respuesta.datos;
-         this.eliminarMiembrosExistentes(this.persona_proyecto, this.personas);
-       }).catch(error => this.Error(error));
+      // miembros de proyecto
+      http.get(`proyecto_personas/${proyecto.id}`).then((respuesta) => {
+        this.persona_proyecto = respuesta.datos;
+        this.eliminarMiembrosExistentes(this.persona_proyecto, this.personas);
+      }).catch(error => this.Error(error));
 
-       this.modal_add_personas = true;
-       this.persona_selected = '';
-       this.objeto = JSON.parse(JSON.stringify(proyecto));
-     },
-     cerrarModalAddPersonas() {
-       this.modal_add_personas = false;
-     },
-     addPersona(idPersona) {
-       if (idPersona !== '') {
-         const adicionarPersona = {};
-         adicionarPersona.fid_proyecto = this.objeto.id;
-         adicionarPersona.fid_persona = idPersona;
-         http.post('proyecto_persona', adicionarPersona).then((respuesta) => {
-           this.Success({ title: 'Añadido con éxito', message: respuesta.mensaje });
-           this.persona_proyecto.push(respuesta.datos);
-           this.eliminarMiembrosExistentes(this.persona_proyecto, this.personas);
-         }).catch(error => this.Error(error));
-       } else {
-         this.Error({ message: 'Selecciona una persona primero' });
-       }
-     },
-     eliminarMiembrosExistentes(miembros, personas) {
-       const idMiembros = [];
-       for (let m = 0; m < miembros.length; m += 1) {
-         idMiembros.push(miembros[m].Usuario.id);
-       }
-       const vectorPersona = [];
-       for (let i = 0; i < personas.length; i += 1) {
-         if (idMiembros.indexOf(personas[i].id) === -1) {
-           vectorPersona.push(personas[i]);
-         }
-       }
-       this.personas = vectorPersona;
-     },
-     eliminarMiembro(miembro, key) {
-       http.deleted(`proyecto_persona/${miembro.id}`).then((respuesta) => {
-         this.Success({ title: 'Eliminado con éxito', message: respuesta.mensaje });
-         this.persona_proyecto.splice(key, 1);
-         this.personas.push(miembro.Usuario);
-       }).catch(error => this.Error(error));
-     },
-     agregarFases() {
-       this.modal_add_fases = true;
-     },
-     cerrarModalAddFases() {
-       this.modal_add_fases = false;
-     },
-     guardarFases() {
-       
-     },
-     detectarCambiosFase() {
-     
-     }
-   },
- };
+      this.modal_add_personas = true;
+      this.persona_selected = '';
+      this.objeto = JSON.parse(JSON.stringify(proyecto));
+    },
+    cerrarModalAddPersonas() {
+      this.modal_add_personas = false;
+    },
+    addPersona(idPersona) {
+      if (idPersona !== '') {
+        const adicionarPersona = {};
+        adicionarPersona.fid_proyecto = this.objeto.id;
+        adicionarPersona.fid_persona = idPersona;
+        http.post('proyecto_persona', adicionarPersona).then((respuesta) => {
+          this.Success({ title: 'Añadido con éxito', message: respuesta.mensaje });
+          this.persona_proyecto.push(respuesta.datos);
+          this.eliminarMiembrosExistentes(this.persona_proyecto, this.personas);
+        }).catch(error => this.Error(error));
+      } else {
+        this.Error({ message: 'Selecciona una persona primero' });
+      }
+    },
+    eliminarMiembrosExistentes(miembros, personas) {
+      const idMiembros = [];
+      for (let m = 0; m < miembros.length; m += 1) {
+        idMiembros.push(miembros[m].Usuario.id);
+      }
+      const vectorPersona = [];
+      for (let i = 0; i < personas.length; i += 1) {
+        if (idMiembros.indexOf(personas[i].id) === -1) {
+          vectorPersona.push(personas[i]);
+        }
+      }
+      this.personas = vectorPersona;
+    },
+    eliminarMiembro(miembro, key) {
+      http.deleted(`proyecto_persona/${miembro.id}`).then((respuesta) => {
+        this.Success({ title: 'Eliminado con éxito', message: respuesta.mensaje });
+        this.persona_proyecto.splice(key, 1);
+        this.personas.push(miembro.Usuario);
+      }).catch(error => this.Error(error));
+    },
+    agregarFases(proyecto) {
+      this.fase = {};
+      this.fase.fid_proyecto = proyecto.id;
+      this.fase.fecha_inicio = new Date();
+      this.fase.fecha_fin = new Date();
+      this.modal_add_fases = true;
+    },
+    cerrarModalAddFases() {
+      this.modal_add_fases = false;
+    },
+    guardarFases() {
+      this.fase.estado = 'creado';
+      http.post('fase', this.fase).then((respuesta) => {
+        this.Success({ title: 'Fase Creada', message: respuesta.mensaje });
+        this.modal_add_fases = false;
+      }).catch(error => this.Error(error));
+    },
+    detectarCambiosFase(dato, objeto) {
+      this.fase[objeto] = dato;
+    },
+  },
+};
 </script>
 
 <style>
