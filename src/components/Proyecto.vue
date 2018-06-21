@@ -27,40 +27,58 @@
     <table class="table is-hoverable is-fullwidth is-narrow">
       <thead>
         <tr>
-          <th><abbr title="Identificador">ID</abbr></th>
-          <th><abbr title="Nombre">Nombre</abbr></th>
-          <th><abbr title="Opciones">Opciones</abbr></th>
+          <th><abbr title="Identificador">Lista de Proyectos</abbr></th>
         </tr>
       </thead>
       <tfoot>
         <tr>
-          <th><abbr title="Identificador">ID</abbr></th>
-          <th><abbr title="Nombre">Nombre</abbr></th>
-          <th><abbr title="Opciones">Opciones</abbr></th>
+          <th><abbr title="Identificador">Lista de Proyectos</abbr></th>
         </tr>
       </tfoot>
       <tbody>
         <tr v-for="(proyecto, key) in proyectos" :key="key">
-            <td>{{ key + 1 }}</td>
-            <td>{{ proyecto.nombre }}</td>
-            <td>
-              <router-link
-                :to="{name: 'ProyectoEditar', params: { proyecto_id: proyecto.id }}"
-                class="button is-primary">
-                Editar
-              </router-link>
-              <button
-                class="button is-warning"
-                @click="agregarPersonas(proyecto)">
-                Agregar Personas al Proyecto
-              </button>
-              <button
-                class="button is-info"
-                @click="agregarFases(proyecto)"
-              >
-                Añadir Fases
-              </button>
-            </td>
+          <td>
+            <router-link
+              :to="{name: 'ProyectoEditar', params: { proyecto_id: proyecto.id }}"
+              class="button is-small is-outlined is-warning">
+              <span class="icon">
+                <icon name="edit" scale="1.5" style="color:#ffdd57;"></icon>
+              </span>
+            </router-link>
+            <span class="title is-5">
+              Proyecto: </span>
+            <span class="subtitle is-5">
+              {{ proyecto.nombre }}
+            </span>
+            <div class="steps">
+              <div class="step-item" v-for="(fase, indice) in proyecto.Fases" :key="indice">
+                <div class="step-marker">
+                  <span class="icon">
+                    <i class="fa fa-check"></i>
+                  </span>
+                </div>
+                <div class="step-details">
+                  <p class="step-title">Fase {{ indice + 1}}</p>
+              <p>{{ fase.nombre }}</p>
+                </div>
+              </div>
+            </div>
+            <button
+              class="button is-info"
+              @click="agregarPersonas(proyecto)">
+              <span class="icon" title="Adicionar Personas al Proyecto">
+                <icon name="user-plus" scale="1.5" style="color:#ffffff;"></icon>
+              </span>
+            </button>
+            <button
+              class="button is-info"
+              @click="agregarFases(proyecto)"
+            >
+              <span class="icon" title="Adicionar Fases">
+                <icon name="warehouse" scale="1.5" style="color:#ffffff;"></icon>
+              </span>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
