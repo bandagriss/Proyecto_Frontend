@@ -25,59 +25,60 @@
     </div>
 
     <table class="table is-hoverable is-fullwidth is-narrow">
-      <thead>
-        <tr>
-          <th><abbr title="Identificador">Lista de Proyectos</abbr></th>
-        </tr>
-      </thead>
-      <tfoot>
-        <tr>
-          <th><abbr title="Identificador">Lista de Proyectos</abbr></th>
-        </tr>
-      </tfoot>
       <tbody>
         <tr v-for="(proyecto, key) in proyectos" :key="key">
           <td>
-            <router-link
-              :to="{name: 'ProyectoEditar', params: { proyecto_id: proyecto.id }}"
-              class="button is-small is-outlined is-warning">
-              <span class="icon">
-                <icon name="edit" scale="1.5" style="color:#ffdd57;"></icon>
-              </span>
-            </router-link>
+
             <span class="title is-5">
               Proyecto: </span>
             <span class="subtitle is-5">
               {{ proyecto.nombre }}
             </span>
-            <div class="steps">
-              <div class="step-item" v-for="(fase, indice) in proyecto.Fases" :key="indice">
-                <div class="step-marker">
-                  <span class="icon">
-                    <i class="fa fa-check"></i>
-                  </span>
-                </div>
-                <div class="step-details">
-                  <p class="step-title">Fase {{ indice + 1}}</p>
-              <p>{{ fase.nombre }}</p>
-                </div>
-              </div>
-            </div>
+            <br/>
+            <router-link
+              :to="{name: 'ProyectoEditar', params: { proyecto_id: proyecto.id }}"
+              class="button is-warning is-rounded">
+              <span class="icon">
+                <icon name="edit" scale="1.5" style="color:#fff;"></icon>
+              </span>
+            </router-link>
             <button
-              class="button is-info"
+              class="button is-info is-rounded"
               @click="agregarPersonas(proyecto)">
               <span class="icon" title="Adicionar Personas al Proyecto">
                 <icon name="user-plus" scale="1.5" style="color:#ffffff;"></icon>
               </span>
             </button>
             <button
-              class="button is-info"
-              @click="agregarFases(proyecto)"
+              class="button is-info is-rounded"
+              @click="agregarFases(proyecto, key)"
             >
               <span class="icon" title="Adicionar Fases">
-                <icon name="warehouse" scale="1.5" style="color:#ffffff;"></icon>
+                <icon name="calendar-plus" scale="1.5" style="color:#ffffff;"></icon>
               </span>
             </button>
+            <br/>
+            <br/>
+            <div class="steps">
+              <div class="step-item" :class="fase.estado == 'finalizado'? 'is-completed' : ''" v-for="(fase, indice) in proyecto.Fases" :key="indice">
+                <a @click="editarFase(fase, indice)">
+                <div class="step-marker">
+                  <span class="icon">
+                    <template v-if="fase.estado == 'finalizado'">
+                      <icon name="check"></icon>
+                    </template>
+                  <template v-else>
+                  {{ indice + 1 }}
+                    </template>
+                  </span>
+                </div>
+                </a>
+                <div class="step-details">
+                  <p class="step-title">Fase {{ indice + 1}}</p>
+              <p>{{ fase.nombre }}</p>
+                </div>
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -223,6 +224,7 @@ export default {
       persona_proyecto: {},
       modal_add_fases: false,
       fase: {},
+      key_proyecto: '',
     };
   },
   props: ['value'],
@@ -289,11 +291,12 @@ export default {
         this.personas.push(miembro.Usuario);
       }).catch(error => this.Error(error));
     },
-    agregarFases(proyecto) {
+    agregarFases(proyecto, key) {
       this.fase = {};
       this.fase.fid_proyecto = proyecto.id;
       this.fase.fecha_inicio = new Date();
       this.fase.fecha_fin = new Date();
+      this.key_proyecto = key;
       this.modal_add_fases = true;
     },
     cerrarModalAddFases() {
@@ -303,11 +306,16 @@ export default {
       this.fase.estado = 'creado';
       http.post('fase', this.fase).then((respuesta) => {
         this.Success({ title: 'Fase Creada', message: respuesta.mensaje });
+        this.proyectos[this.key_proyecto].Fases.push(respuesta.datos);
         this.modal_add_fases = false;
       }).catch(error => this.Error(error));
     },
     detectarCambiosFase(dato, objeto) {
       this.fase[objeto] = dato;
+    },
+    editarFase(fase, indice) {
+      console.log('===================>', 'editando', 'fase', fase);
+      console.log('===================>', 'editando', 'indice', indice);
     },
   },
 };
