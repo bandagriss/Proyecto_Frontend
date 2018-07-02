@@ -24,13 +24,13 @@
       </div>
     </div>
 
-    <table class="table is-hoverable is-fullwidth is-narrow">
+    <table class="table is-fullwidth">
       <tbody>
         <tr v-for="(proyecto, key) in proyectos" :key="key">
           <td>
 
             <span class="title is-5">
-              Proyecto: </span>
+              Nombre Proyecto: </span>
             <span class="subtitle is-5">
               {{ proyecto.nombre }}
             </span>
@@ -50,18 +50,24 @@
               </span>
             </button>
             <button
-              class="button is-info is-rounded"
+              class="button is-link is-rounded"
               @click="agregarFases(proyecto, key)"
             >
               <span class="icon" title="Adicionar Fases">
-                <icon name="calendar-plus" scale="1.5" style="color:#ffffff;"></icon>
+              <icon name="warehouse" scale="1.5" style="color:#ffffff;"></icon>
               </span>
             </button>
             <br/>
             <br/>
             <div class="steps">
-              <div class="step-item" :class="fase.estado == 'finalizado'? 'is-completed' : ''" v-for="(fase, indice) in proyecto.Fases" :key="indice">
-                <a @click="editarFase(fase, indice)">
+              <div class="step-item"
+                   :class="{
+                          'is-completed' : fase.estado == 'finalizado',
+                          'is-active' : fase.estado == 'en proceso'
+                          }"
+                   v-for="(fase, indice) in proyecto.Fases"
+                   :key="indice">
+                <a @click="editarFase(fase, indice, key)">
                 <div class="step-marker">
                   <span class="icon">
                     <template v-if="fase.estado == 'finalizado'">
@@ -199,7 +205,105 @@
         </section>
         <footer class="modal-card-foot">
           <button class="button is-success" @click="guardarFases()">Guardar</button>
-          <button class="button" @click="cerrarModalAddFases()">Cerrar</button>
+      <button class="button" @click="cerrarModalAddFases()">Cerrar</button>
+        </footer>
+      </div>
+    </div>
+    <!-- editar fase modal  -->
+    <div class="modal" :class="modal_edit_fases? 'is-active' : ''">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title"> Editar Fase</p>
+          <button class="delete" aria-label="close" @click="cerrarModalEditFases()"></button>
+        </header>
+        <section class="modal-card-body">
+          <datepicker
+            placeholder="('m-d-Y')"
+            :config="{ dateFormat: 'm-d-Y',
+                         static: true,
+                         onOpen: this.detectarCambiosFaseEdit(
+                         fase.fecha_inicio,
+                         'fecha_inicio')
+                         }"
+            v-model="fase.fecha_inicio"
+          >
+          </datepicker>
+          <datepicker
+            placeholder="('m-d-Y')"
+            :config="{ dateFormat: 'm-d-Y',
+                         static: true,
+                         onOpen: this.detectarCambiosFaseEdit(
+                         fase.fecha_fin,
+                         'fecha_fin')
+                         }"
+            v-model="fase.fecha_fin"
+          >
+          </datepicker>
+          <div class="field">
+            <label class="label">Nombre</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                placeholder="Nombre de Fase"
+                v-model="fase.nombre"
+                @change="detectarCambiosFaseEdit(fase.nombre, 'nombre')"
+              >
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Descripción</label>
+            <div class="control">
+              <textarea
+                class="textarea"
+                placeholder="Descripción de la Fase"
+                v-model="fase.descripcion"
+                @change="detectarCambiosFaseEdit(fase.descripcion, 'descripcion')"
+              ></textarea>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-body">
+              <div class="field-label is-normal">
+                <label class="label">Gasto</label>
+              </div>
+              <div class="field">
+                <p class="control is-expanded">
+                  <input
+                    type="number"
+                    placeholder="Gastos en Bs."
+                    class="input"
+                    v-model ="fase.gastos"
+                    @change="detectarCambiosFaseEdit(fase.gastos, 'gastos')"
+                  >
+                </p>
+              </div>
+            </div>
+            <div class="field-body">
+              <div class="field-label is-normal">
+                <label class="label">Estado</label>
+              </div>
+              <div class="field">
+                <span class="control is-expanded">
+                  <div class="select">
+                    <select name="country"
+                            v-model="fase_estado"
+                            @change="detectarCambiosFaseEdit(fase_estado, 'estado')"
+                    >
+                      <option value="creado">Creado</option>
+                      <option value="en proceso">En Proceso</option>
+                      <option value="finalizado">Finalizado</option>
+                    </select>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="guardarFaseEdit(fase)">Guardar</button>
+          <button class="button" @click="cerrarModalEditFases()">Cerrar</button>
         </footer>
       </div>
     </div>
@@ -223,8 +327,12 @@ export default {
       objeto: {},
       persona_proyecto: {},
       modal_add_fases: false,
+      modal_edit_fases: false,
       fase: {},
       key_proyecto: '',
+      fase_estado: '',
+      fase_edit: {},
+      indice_fase_edit: '',
     };
   },
   props: ['value'],
@@ -313,9 +421,29 @@ export default {
     detectarCambiosFase(dato, objeto) {
       this.fase[objeto] = dato;
     },
-    editarFase(fase, indice) {
-      console.log('===================>', 'editando', 'fase', fase);
-      console.log('===================>', 'editando', 'indice', indice);
+    detectarCambiosFaseEdit(dato, objeto) {
+      this.fase_edit[objeto] = dato;
+    },
+    editarFase(fase, indice, key) {
+      this.key_proyecto = key;
+      this.fase = {};
+      this.fase_edit = {};
+      this.modal_edit_fases = true;
+      this.indice_fase_edit = indice;
+      http.get(`fase/${fase.id}`).then((respuesta) => {
+        this.fase = respuesta.datos;
+        this.fase_estado = respuesta.datos.estado;
+      }).catch(error => this.Error(error));
+    },
+    guardarFaseEdit(fase) {
+      http.put(`fase/${fase.id}`, this.fase_edit).then((respuesta) => {
+        this.Success({ title: 'Fase Actualizada Correctamente', message: respuesta.mensaje });
+        this.proyectos[this.key_proyecto].Fases.splice(this.indice_fase_edit, 1, respuesta.datos);
+        this.modal_edit_fases = false;
+      }).catch(error => this.Error(error));
+    },
+    cerrarModalEditFases() {
+      this.modal_edit_fases = false;
     },
   },
 };
