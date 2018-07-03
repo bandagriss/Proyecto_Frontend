@@ -374,6 +374,7 @@ export default {
           this.Success({ title: 'Añadido con éxito', message: respuesta.mensaje });
           this.persona_proyecto.push(respuesta.datos);
           this.eliminarMiembrosExistentes(this.persona_proyecto, this.personas);
+          this.persona_selected = '';
         }).catch(error => this.Error(error));
       } else {
         this.Error({ message: 'Selecciona una persona primero' });
