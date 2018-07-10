@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import VueNotifications from 'vue-notifications';
+import FileUpload from 'v-file-upload';
 import App from './App';
 import router from './router';
 import auth from './auth';
@@ -10,6 +11,7 @@ auth.checkAuth();
 
 const NotificacionOpciones = require('./common/generals/js/Toastr.js');
 
+Vue.use(FileUpload);
 Vue.use(VueNotifications, NotificacionOpciones.default.options);
 
 const Icon = require('vue-awesome');

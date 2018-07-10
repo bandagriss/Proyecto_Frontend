@@ -357,7 +357,7 @@ export default {
           .then((respuesta) => {
             this.image = '';
             this.Success({ title: 'Imagen guardada', message: respuesta.mensaje });
-            this.datos_ingresados.logo = respuesta.datos.path.replace('public/', '');
+            this.datos_ingresados.logo = respuesta.datos.replace('public/', '');
             this.imagenLogo = true;
             this.rutaImagen = `${config.API_REST}${this.datos_ingresados.logo}`;
             document.querySelector('.ui.red.button').click();

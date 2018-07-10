@@ -300,6 +300,27 @@
               </div>
             </div>
           </div>
+          <div class="field">
+            <label class="label">Documentos</label>
+            <ul v-for="(documento, indiceDocumento) in fase.Documentos" :key="indiceDocumento">
+              <li>{{ documento.detalle }}
+                <a @click="eliminarMiembro(miembro, key)">
+                  <span class="icon">
+                    <icon name="trash" scale="1.5" style="color:red;"></icon>
+                  </span>
+                </a>
+              </li>
+
+            </ul>
+            <file-upload
+              :url="url"
+              :thumb-url="thumbUrl"
+              :headers="headers"
+              @change="onFileChange"
+              btn-label="Selecciona un archivo"
+            >
+            </file-upload>
+          </div>
         </section>
         <footer class="modal-card-foot">
           <button class="button is-success" @click="guardarFaseEdit(fase)">Guardar</button>
@@ -315,6 +336,8 @@
 import Datepicker from 'vue-bulma-datepicker';
 import Mensajes from '../common/generals/js/Notificacion';
 import http from '../common/generals/js/DataService';
+import config from '../config';
+import auth from '../auth';
 
 export default {
   data() {
@@ -333,6 +356,9 @@ export default {
       fase_estado: '',
       fase_edit: {},
       indice_fase_edit: '',
+      url: '',
+      headers: auth.getAuthHeader(),
+      filesUploaded: [],
     };
   },
   props: ['value'],
@@ -445,6 +471,13 @@ export default {
     },
     cerrarModalEditFases() {
       this.modal_edit_fases = false;
+    },
+    thumbUrl(file) {
+      this.url = `${config.API_REST_PRIVADA}documento/${this.fase.id}`;
+      return file.myThumbUrlProperty;
+    },
+    onFileChange(file) {
+      this.fileUploaded = file;
     },
   },
 };
