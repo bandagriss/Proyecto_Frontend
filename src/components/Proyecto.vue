@@ -303,8 +303,14 @@
           <div class="field">
             <label class="label">Documentos</label>
             <ul v-for="(documento, indiceDocumento) in fase.Documentos" :key="indiceDocumento">
-              <li>{{ documento.detalle }}
-                <a @click="eliminarMiembro(miembro, key)">
+              <li><a
+                    :href="url_documentos + documento.detalle"
+                    target="_blank"
+                  >
+                {{ documento.nombre }}
+              </a>
+
+                <a @click="eliminarDocumento(documento, indiceDocumento)">
                   <span class="icon">
                     <icon name="trash" scale="1.5" style="color:red;"></icon>
                   </span>
@@ -317,7 +323,7 @@
               :thumb-url="thumbUrl"
               :headers="headers"
               @change="onFileChange"
-              btn-label="Selecciona un archivo"
+              btn-label="Subir archivo"
             >
             </file-upload>
           </div>
@@ -359,6 +365,7 @@ export default {
       url: '',
       headers: auth.getAuthHeader(),
       filesUploaded: [],
+      url_documentos: config.API_REST,
     };
   },
   props: ['value'],
@@ -473,11 +480,18 @@ export default {
       this.modal_edit_fases = false;
     },
     thumbUrl(file) {
-      this.url = `${config.API_REST_PRIVADA}documento/${this.fase.id}`;
+      this.url = `${config.API_REST_PRIVADA}documentos/${this.fase.id}`;
       return file.myThumbUrlProperty;
     },
     onFileChange(file) {
       this.fileUploaded = file;
+      this.fase.Documentos.push(file.datos);
+    },
+    eliminarDocumento(documento, key) {
+      http.deleted(`documentos/${documento.id}`).then((respuesta) => {
+        this.Success({ title: 'Eliminado con éxito', message: respuesta.mensaje });
+        this.fase.Documentos.splice(key, 1);
+      }).catch(error => this.Error(error));
     },
   },
 };
