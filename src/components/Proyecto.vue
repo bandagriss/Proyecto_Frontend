@@ -57,6 +57,14 @@
               <icon name="warehouse" scale="1.5" style="color:#ffffff;"></icon>
               </span>
             </button>
+            <button
+              class="button is-link is-rounded"
+              @click="verPreviewReporte(proyecto)"
+            >
+              <span class="icon" title="Previsualizar Reporte">
+              <icon name="warehouse" scale="1.5" style="color:#ffffff;"></icon>
+              </span>
+            </button>
             <br/>
             <br/>
             <div class="steps">
@@ -334,6 +342,23 @@
         </footer>
       </div>
     </div>
+    <!-- previsualizar reporte -->
+    <div class="modal" :class="modal_preview_reporte? 'is-active' : ''">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title"> Reporte del Proyecto </p>
+          <button class="delete" aria-label="close" @click="cerrarModalPreviewReporte()"></button>
+        </header>
+        <section class="modal-card-body">
+          <div id="reporteProyecto"></div>
+        </section>
+        <footer class="modal-card-foot">
+          <!-- <button class="button is-success" @click="guardarFaseEdit(fase)">Guardar</button> -->
+          <button class="button" @click="cerrarModalPreviewReporte()">Cerrar</button>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -344,6 +369,7 @@ import Mensajes from '../common/generals/js/Notificacion';
 import http from '../common/generals/js/DataService';
 import config from '../config';
 import auth from '../auth';
+import PDFObject from '../../paquetes_externos/pdfobject.min';
 
 export default {
   data() {
@@ -366,6 +392,7 @@ export default {
       headers: auth.getAuthHeader(),
       filesUploaded: [],
       url_documentos: config.API_REST,
+      modal_preview_reporte: false,
     };
   },
   props: ['value'],
@@ -493,6 +520,22 @@ export default {
         this.fase.Documentos.splice(key, 1);
       }).catch(error => this.Error(error));
     },
+    verPreviewReporte(proyecto) {
+      this.modal_preview_reporte = true;
+      const options = {
+        pdfOpenParams: {
+          pagemode: 'thumbs',
+          navpanes: 0,
+          toolbar: 0,
+          statusbar: 0,
+          view: 'FitV',
+        },
+      };
+      PDFObject.embed(`http://localhost:3000/api/v1/reportes/${proyecto.id}`, '#reporteProyecto', options);
+    },
+    cerrarModalPreviewReporte() {
+      this.modal_preview_reporte = false;
+    },
   },
 };
 </script>
@@ -507,5 +550,11 @@ export default {
  .fondo-contenido {
    /* background-color: white; */
    padding: 2px 10px 2px 10px;
+ }
+ .pdfobject-container {
+   height: 500px;
+ }
+ .pdfobject {
+   border: 1px solid #666;
  }
 </style>
