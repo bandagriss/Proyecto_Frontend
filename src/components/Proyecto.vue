@@ -58,11 +58,11 @@
               </span>
             </button>
             <button
-              class="button is-link is-rounded"
+              class="button is-success is-rounded"
               @click="verPreviewReporte(proyecto)"
             >
               <span class="icon" title="Previsualizar Reporte">
-              <icon name="warehouse" scale="1.5" style="color:#ffffff;"></icon>
+              <icon name="book" scale="1.5" style="color:#ffffff;"></icon>
               </span>
             </button>
             <br/>
