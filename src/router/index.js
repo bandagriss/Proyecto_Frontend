@@ -9,11 +9,11 @@ import Institucion from '@/components/configuracion/Institucion';
 import Usuario from '@/components/configuracion/Usuario';
 // proyecto
 import Proyectos from '@/components/Proyecto';
+import ProyectosPorInstitucion from '@/components/ProyectoPorInstitucion';
 import NuevoProyecto from '@/components/NuevoProyecto';
 import ProyectoEditar from '@/components/ProyectoEditar';
 
 import Login from '@/auth/Login';
-import Registrarse from '@/auth/Register';
 import PaginaNoEncontrada from '@/auth/404';
 import ErrorServidor from '@/auth/500';
 import ErrorAutenticacion from '@/auth/403';
@@ -38,6 +38,12 @@ export default new Router({
       path: '/proyectos',
       name: 'Proyectos',
       component: Proyectos,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/proyectos_institucion/:departamento_id',
+      name: 'ProyectosPorInstitucion',
+      component: ProyectosPorInstitucion,
       meta: { requiresAuth: true },
     },
     {
@@ -80,11 +86,6 @@ export default new Router({
       name: 'Usuario',
       component: Usuario,
       meta: { requiresAuth: true },
-    },
-    {
-      path: '/registrarse',
-      name: 'registrarse',
-      component: Registrarse,
     },
     {
       path: '/500',

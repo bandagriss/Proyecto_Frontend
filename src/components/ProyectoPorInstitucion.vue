@@ -1,6 +1,9 @@
 <template>
   <div class="fondo-contenido">
-    <h1 class="title is-2">Mis Proyectos</h1>
+    <h1 class="title is-2"
+        v-if="proyectos.length"
+    >Mis Proyectos ( {{ proyectos[0].Institucion.nombre}} )</h1>
+    <h1 class="title is-2" v-else>Mis Proyectos </h1>
     <router-link :to="{name: 'NuevoProyecto'}" class="button is-success is-rounded">
       Crear Nuevo &nbsp;
       <span class="icon">
@@ -54,7 +57,7 @@
               @click="agregarFases(proyecto, key)"
             >
               <span class="icon" title="Adicionar Fases">
-              <icon name="warehouse" scale="1.5" style="color:#ffffff;"></icon>
+                <icon name="warehouse" scale="1.5" style="color:#ffffff;"></icon>
               </span>
             </button>
             <button
@@ -62,7 +65,7 @@
               @click="verPreviewReporte(proyecto)"
             >
               <span class="icon" title="Previsualizar Reporte">
-              <icon name="book" scale="1.5" style="color:#ffffff;"></icon>
+                <icon name="book" scale="1.5" style="color:#ffffff;"></icon>
               </span>
             </button>
             <br/>
@@ -76,20 +79,20 @@
                    v-for="(fase, indice) in proyecto.Fases"
                    :key="indice">
                 <a @click="editarFase(fase, indice, key)">
-                <div class="step-marker">
-                  <span class="icon">
-                    <template v-if="fase.estado == 'finalizado'">
-                      <icon name="check"></icon>
-                    </template>
-                  <template v-else>
-                  {{ indice + 1 }}
-                    </template>
-                  </span>
-                </div>
+                  <div class="step-marker">
+                    <span class="icon">
+                      <template v-if="fase.estado == 'finalizado'">
+                        <icon name="check"></icon>
+                      </template>
+                      <template v-else>
+                        {{ indice + 1 }}
+                      </template>
+                    </span>
+                  </div>
                 </a>
                 <div class="step-details">
                   <p class="step-title">Fase {{ indice + 1}}</p>
-              <p>{{ fase.nombre }}</p>
+                  <p>{{ fase.nombre }}</p>
                 </div>
               </div>
             </div>
@@ -213,7 +216,7 @@
         </section>
         <footer class="modal-card-foot">
           <button class="button is-success" @click="guardarFases()">Guardar</button>
-      <button class="button" @click="cerrarModalAddFases()">Cerrar</button>
+          <button class="button" @click="cerrarModalAddFases()">Cerrar</button>
         </footer>
       </div>
     </div>
@@ -318,11 +321,11 @@
                 {{ documento.nombre }}
               </a>
 
-                <a @click="eliminarDocumento(documento, indiceDocumento)">
-                  <span class="icon">
-                    <icon name="trash" scale="1.5" style="color:red;"></icon>
-                  </span>
-                </a>
+              <a @click="eliminarDocumento(documento, indiceDocumento)">
+                <span class="icon">
+                  <icon name="trash" scale="1.5" style="color:red;"></icon>
+                </span>
+              </a>
               </li>
 
             </ul>
@@ -401,7 +404,7 @@ export default {
   },
   notifications: Mensajes.mensajes,
   created() {
-    http.get(`proyectos_usuarios/${localStorage.getItem('id')}`).then((respuesta) => {
+    http.get(`proyectos_institucion/${this.$route.params.departamento_id}`).then((respuesta) => {
       this.proyectos = respuesta.datos;
     }).catch(error => this.Error(error));
   },

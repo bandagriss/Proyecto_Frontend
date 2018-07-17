@@ -95,7 +95,7 @@ export default {
 
       auth.login_or_signup('login', this, credenciales, 'inicio')
         .then(() => {
-          this.Success({ title: 'Bienvenido', message: 'Roy' });
+          this.Success({ title: 'Bienvenido', message: auth.user.nombres });
         }).catch(() => {
           this.Error({ title: 'Error de Autenticación', message: 'Usuario ó Contraseña Invalidos' });
         });

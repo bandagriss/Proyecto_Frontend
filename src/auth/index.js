@@ -27,6 +27,7 @@ export default {
       }
       axios.post(url, creds)
         .then((response) => {
+          localStorage.setItem('id', response.data.data.id);
           localStorage.setItem('id_token', response.data.token);
           localStorage.setItem('nombres', response.data.data.nombres);
           localStorage.setItem('apellido_paterno', response.data.data.apellido_paterno != null ? response.data.data.apellido_paterno : '');
@@ -36,6 +37,7 @@ export default {
           localStorage.setItem('institucion_nombre', response.data.data.institucion_nombre);
           localStorage.setItem('institucion', response.data.data.institucion);
           // localStorage.setItem('usuario', response.data.usuario);
+          this.user.id = response.data.data.id;
           this.user.nombres = response.data.data.nombres;
           this.user.apellido_paterno = response.data.data.apellido_paterno != null ? response.data.data.apellido_paterno : '';
           this.user.apellido_materno = response.data.data.apellido_materno != null ? response.data.data.apellido_materno : '';
