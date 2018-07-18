@@ -224,6 +224,10 @@ export default {
       this.datos_ingresados.fid_institucion = localStorage.getItem('institucion');
       this.datos_ingresados.codigo_proyecto = 'aabbcc';
       http.post('proyecto', this.datos_ingresados).then((respuesta) => {
+        const adicionarPersona = {};
+        adicionarPersona.fid_proyecto = respuesta.datos.id;
+        adicionarPersona.fid_persona = localStorage.getItem('id');
+        http.post('proyecto_persona', adicionarPersona);
         this.Success({ title: 'Guardado con éxito', message: respuesta.mensaje });
         router.push('/proyectos');
       }).catch(error => this.Error(error));

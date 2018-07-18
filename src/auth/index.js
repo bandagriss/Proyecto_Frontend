@@ -47,7 +47,11 @@ export default {
           this.user.authenticated = true;
 
           if (redirect) {
-            resolve(router.push(redirect));
+            if (this.user.rol_nombre === 'Administrador' || this.user.rol_nombre === 'Director' || this.user.rol_nombre === 'Técnico') {
+              resolve(router.push(redirect));
+            } else {
+              resolve(router.push('proyectos'));
+            }
           }
         }).catch((err) => {
           // context.error = err.response.data;
