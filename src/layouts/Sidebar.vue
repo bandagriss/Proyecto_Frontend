@@ -19,7 +19,7 @@
 
         </figure>
         <div class="datos-usuario">
-          Rol: {{ rol_usuario }}
+          Rol: {{ r_user }}
           <br/>
           {{ nombre_usuario }}
         </div>
@@ -27,12 +27,16 @@
     </div>
     <div id="menu-dinamico">
       <ul>
-        <li><router-link :to="{name:'Inicio'}">
+        <li
+          v-if="r_user == 'Administrador' || r_user == 'Director' || r_user == 'Técnico'"
+        >
+          <router-link :to="{name:'Inicio'}">
           <span class="icon">
             <icon name="home" scale="1.5"></icon>
           </span>
           <span class="espacio">Inicio</span>
-        </router-link></li>
+          </router-link>
+        </li>
         <li><router-link :to="{name:'Financiadores'}">
           <span class="icon">
             <icon name="users" scale="1.5"></icon>
@@ -45,7 +49,8 @@
           </span>
           <span class="espacio">Proyectos</span>
         </router-link></li>
-        <li><a @click="activarSubMenu()">
+        <li v-if="r_user == 'Administrador'">
+          <a @click="activarSubMenu()">
           <span class="icon">
             <icon name="cogs" scale="1.5"></icon>
           </span>
@@ -105,7 +110,7 @@ export default {
     return {
       activo: false,
       nombre_usuario: `${auth.user.nombres} ${auth.user.apellido_paterno ? auth.user.apellido_paterno : ''} ${auth.user.apellido_materno ? auth.user.apellido_materno : ''}`,
-      rol_usuario: auth.user.rol_nombre,
+      r_user: auth.user.rol_nombre,
       submenu: false,
       imagen_usuario: `${auth.user.imagen_usuario ? auth.user.imagen_usuario : false}`,
     };
