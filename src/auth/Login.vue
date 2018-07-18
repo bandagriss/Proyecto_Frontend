@@ -51,18 +51,20 @@
                   Recuerdame
                 </label>
               </div>
-              <button
-                type="submit"
-                class="button is-block is-info is-large"
-                @click="autenticar()"
-                @enter="autenticar()"
-              > Autenticarse</button>
+              <div align="center">
+                <button
+                  type="submit"
+                  class="button is-block is-info is-large"
+                  @click="autenticar()"
+                  @enter="autenticar()"
+                > Ingresar </button>
+              </div>
             </form>
           </div>
           <p class="has-text-grey">
             <!-- <a class="has-text-info">Registrarse</a> &nbsp;·&nbsp; -->
-            <router-link to="/registrarse">Registrarse</router-link>
-            <a class="has-text-info">Olvido su contraseña</a> &nbsp;&nbsp;
+            <!-- <router-link to="/registrarse">Registrarse</router-link> -->
+            <!-- <a class="has-text-info">Olvido su contraseña</a> &nbsp;&nbsp; -->
           </p>
         </div>
       </div>
