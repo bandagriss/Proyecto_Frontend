@@ -13,7 +13,7 @@
               <p><strong>Descripción:</strong> {{ i.descripcion }} </p>
               <router-link
                 :to="{name: 'ProyectosPorInstitucion',
-                     params: { departamento_id: i.Departamento.id }}"
+                     params: { institucion_id: i.id }}"
                 class="button is-primary is-large">
                 Entrar
               </router-link>

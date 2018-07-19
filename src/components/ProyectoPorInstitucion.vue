@@ -404,7 +404,7 @@ export default {
   },
   notifications: Mensajes.mensajes,
   created() {
-    http.get(`proyectos_institucion/${this.$route.params.departamento_id}`).then((respuesta) => {
+    http.get(`proyectos_institucion/${this.$route.params.institucion_id}`).then((respuesta) => {
       this.proyectos = respuesta.datos;
     }).catch(error => this.Error(error));
   },

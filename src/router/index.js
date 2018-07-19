@@ -41,7 +41,7 @@ export default new Router({
       meta: { requiresAuth: true },
     },
     {
-      path: '/proyectos_institucion/:departamento_id',
+      path: '/proyectos_institucion/:institucion_id',
       name: 'ProyectosPorInstitucion',
       component: ProyectosPorInstitucion,
       meta: { requiresAuth: true },
