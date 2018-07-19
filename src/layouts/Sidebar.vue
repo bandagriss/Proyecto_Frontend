@@ -8,9 +8,7 @@
     <div class="marco-imagen">
       <div class="imagen-usuario">
         <figure class="image is-256x256 imagen-usuario">
-          <!-- <img src="https://images5.alphacoders.com/413/413842.jpg"> -->
-          <template v-if="!imagen_usuario">
-            <h1>{{ imagen_usuario }}</h1>
+          <template v-if="imagen_usuario">
             <img :src="imagen_usuario">
           </template>
           <template v-else>
@@ -104,6 +102,7 @@
 
 import EventBus from './event-bus';
 import auth from '../auth';
+import config from '../config';
 
 export default {
   data() {
@@ -112,17 +111,23 @@ export default {
       nombre_usuario: `${auth.user.nombres} ${auth.user.apellido_paterno ? auth.user.apellido_paterno : ''} ${auth.user.apellido_materno ? auth.user.apellido_materno : ''}`,
       r_user: auth.user.rol_nombre,
       submenu: false,
-      imagen_usuario: `${auth.user.imagen_usuario ? auth.user.imagen_usuario : false}`,
+      imagen_usuario: auth.user.imagen_usuario ? `${config.API_REST}${auth.user.imagen_usuario}` : false,
     };
   },
   created() {
     EventBus.$on('menuClick', (activo) => {
       this.activo = activo;
     });
+    EventBus.$on('cambiarImagen', () => {
+      this.imagen_usuario = `${config.API_REST}${auth.user.imagen_usuario}`;
+    });
   },
   methods: {
     activarSubMenu() {
       this.submenu = !this.submenu;
+    },
+    imagenUsuario() {
+      return auth.user.imagen_usuario ? `${config.API_REST}${auth.user.imagen_usuario}` : false;
     },
   },
 };

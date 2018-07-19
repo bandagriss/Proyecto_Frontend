@@ -30,9 +30,9 @@
               <!-- <p>{{ usuario }}</p> -->
             </a>
             <div class="navbar-dropdown is-right" :class="activo? 'active' : '' ">
-              <a class="navbar-item" href="/documentation/overview/start/">
+              <router-link :to="{name: 'DatosUsuario'}" class="navbar-item">
                 Datos Personales
-              </a>
+              </router-link>
               <a class="navbar-item"
                @click="logout">
                 Cerrar Sessión
