@@ -93,6 +93,7 @@
                     @change="detectarCambios(objeto.nombres, 'nombres')"
                   />
                 </div>
+                <p class="help is-danger" v-if="error.nombres">{{ error.mensaje }}</p>
               </div>
             </div>
             <div class="column is-4">
@@ -111,6 +112,7 @@
                     @change="detectarCambios(objeto.apellido_paterno, 'apellido_paterno')"
                   />
                 </div>
+                <p class="help is-danger" v-if="error.apellido_paterno">{{ error.mensaje }}</p>
               </div>
             </div>
             <div class="column is-4">
@@ -129,6 +131,11 @@
                     @change="detectarCambios(objeto.apellido_materno, 'apellido_materno')"
                   />
                 </div>
+                <p class="help is-danger"
+                   v-if="error.apellido_materno == true"
+                >
+                  {{ error.mensaje }}
+                </p>
               </div>
             </div>
           </div>
@@ -368,6 +375,7 @@ export default {
       } else {
         this.error = {};
         this.error[datoValidado.objeto] = true;
+        this.error.mensaje = datoValidado.mensaje;
         this.Error({ title: 'Error al llenar el formulario', message: datoValidado.mensaje });
       }
     },
