@@ -27,6 +27,7 @@
 
 <script>
 
+import Validacion from 'local_modules/validaciones';
 import Mensajes from '../common/generals/js/Notificacion';
 import http from '../common/generals/js/DataService';
 
@@ -56,6 +57,7 @@ export default {
         this.instituciones.push(grupo);
       }
     }).catch(error => this.Error(error));
+    Validacion.holaMundo();
   },
   methods: {
   },

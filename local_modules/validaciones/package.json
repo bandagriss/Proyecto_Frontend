@@ -1,0 +1,11 @@
+{
+  "name": "validaciones",
+  "version": "1.0.0",
+  "description": "Paquete de validaciones para los datos insertados",
+  "main": "index.js",
+  "author": "Roger Ivan Aroa Miranda",
+  "license": "MIT",
+  "dependencies": {
+  
+  }
+}

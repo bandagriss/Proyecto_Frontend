@@ -86,8 +86,9 @@
                 <div class="control">
                   <input
                     class="input"
+                    :class="{ 'is-primary' : objeto.nombres, 'is-danger' : error.nombres }"
                     type="text"
-                    placeholder=""
+                    placeholder="Nombres"
                     v-model="objeto.nombres"
                     @change="detectarCambios(objeto.nombres, 'nombres')"
                   />
@@ -100,6 +101,10 @@
                 <div class="control">
                   <input
                     class="input"
+                    :class="{
+                           'is-danger' : error.apellido_paterno,
+                           'is-primary' : objeto.apellido_paterno
+                           }"
                     type="text"
                     placeholder=""
                     v-model="objeto.apellido_paterno"
@@ -114,6 +119,10 @@
                 <div class="control">
                   <input
                     class="input"
+                    :class="{
+                           'is-danger' : error.apellido_materno,
+                           'is-primary' : objeto.apellido_materno
+                           }"
                     type="text"
                     placeholder=""
                     v-model="objeto.apellido_materno"
@@ -271,6 +280,7 @@
 
 <script>
 
+import Validacion from 'local_modules/validaciones';
 import Mensajes from '../../common/generals/js/Notificacion';
 import http from '../../common/generals/js/DataService';
 
@@ -289,6 +299,7 @@ export default {
       roles: '',
       rol_selected: '',
       datos_ingresados: {},
+      error: {},
     };
   },
   notifications: Mensajes.mensajes,
@@ -324,6 +335,8 @@ export default {
       this.key = '';
       this.accion = 'Crear';
       this.selected = '';
+      this.error = {};
+      this.datos_ingresados = {};
     },
     cerrarModalNuevo() {
       this.modal_nuevo_activado = false;
@@ -339,16 +352,24 @@ export default {
       }
     },
     crear(data) {
-      http.post('usuarios', data)
-        .then((respuesta) => {
-          const nuevoUsuario = respuesta.datos;
-          this.usuarios.push(nuevoUsuario);
-          this.Success({ title: 'Guardado con éxito', message: respuesta.mensaje });
-          this.limpiar();
-        })
-        .catch((error) => {
-          this.Error(error);
-        });
+      const datoValidado = this.validar(data);
+      if (datoValidado.valido === true) {
+        this.error = {};
+        http.post('usuarios', data)
+          .then((respuesta) => {
+            const nuevoUsuario = respuesta.datos;
+            this.usuarios.push(nuevoUsuario);
+            this.Success({ title: 'Guardado con éxito', message: respuesta.mensaje });
+            this.limpiar();
+          })
+          .catch((error) => {
+            this.Error(error);
+          });
+      } else {
+        this.error = {};
+        this.error[datoValidado.objeto] = true;
+        this.Error({ title: 'Error al llenar el formulario', message: datoValidado.mensaje });
+      }
     },
     actualizar(item, data) {
       http.put(`usuarios/${item.id}`, data)
@@ -396,7 +417,16 @@ export default {
       this.datos_ingresados = {};
     },
     detectarCambios(dato, objeto) {
+      this.error = {};
       this.datos_ingresados[objeto] = dato;
+    },
+    validar(data) {
+      const datos = [
+        { objeto: 'nombres', valor: data.nombres, nombre: 'Nombres', funcion: ['requerido'] },
+        { objeto: 'apellido_paterno', valor: data.apellido_paterno, nombre: 'Apellido Paterno', funcion: ['requerido'] },
+        { objeto: 'apellido_materno', valor: data.apellido_materno, nombre: 'Apellido Materno', funcion: ['requerido', 'numero'] },
+      ];
+      return Validacion.validar(Validacion, datos);
     },
   },
 };
